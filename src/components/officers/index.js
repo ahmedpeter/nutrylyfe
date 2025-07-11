@@ -14,57 +14,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Doughnut } from "react-chartjs-2";
 import Modal from "@mui/material/Modal";
-import {Chart, ArcElement} from 'chart.js'
-Chart.register(ArcElement);
 
-
-
-
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: '70%',
-  bgcolor: "background.paper",
-  boxShadow: 24,
-  p: 4,
-};
-
-const columns = [
-  { id: "officer", label: "Officer Name" },
-  { id: "branch", label: "Branch" },
-  { id: "email", label: "Email" },
-  { id: "phone", label: "Phone Number" },
-  { id: "status", label: "Status" },
-  { id: "action", label: "" },
-];
-
-const data = {
-    datasets: [
-      {
-        data: [83, 20],
-       
-        backgroundColor: [
-          'rgba(236, 112, 122, 1)',
-          'rgba(16, 172, 126, 1)'
-        ]
-      },
-    ],
-  };
-
-  var config = {        
-    cutout: 28,
-    responsive: true,
-    maintainAspectRatio: true,
-    options: {},
-};
-
-
-
-function createData(officer, branch, email, phone, status, action) {
-  return { officer, branch, email, phone, status, action };
-}
 
 const Officers = () => {
   const [newOfficerModal, setNewOfficerModal] = useState(false);
@@ -72,340 +22,151 @@ const Officers = () => {
 
   return (
     <section>
-      <section className="page__header">
-        <GroupsIcon />
-        <h3>Manage Officers</h3>
-      </section>
-      <div className="s-divider"></div>
-      <section style={{display: 'flex'}}>
-          <div className="stat m45">
-        <div className="left__stat py-32">
-          <h3 className="stat__value">209
-          <p className="sub__title">Total Officers</p>
-          </h3>
-          <div>
-              <Doughnut data={data} options={config} className="w80" />
-          </div>
-
-
-        </div>
-        <div className="right__stat">
-          <div className="right__sub s-divider">
-            <h3 className="stat__value c-success">83</h3>
-            <p className="sub__title">Active</p>
-          </div>
-          <div className="right__sub">
-            <h3 className="stat__value c-error">20</h3>
-            <p className="sub__title">Inactive</p>
-          </div>
-        </div>
-        </div>
-
-        <div className="stat m45">
-        <div className="left__stat py-32">
-          <div>
-              <Doughnut data={data} options={config} className="w80" />
-          </div>
-
-
-        </div>
-        <div className="right__stat">
-          <div className="right__sub s-divider">
-            <h3 className="stat__value c-success">83</h3>
-            <p className="sub__title">Male</p>
-          </div>
-          <div className="right__sub">
-            <h3 className="stat__value c-error">20</h3>
-            <p className="sub__title">Female</p>
-          </div>
-        </div>
-        </div>
-      </section>
-
-      <section className="flex-container alc p-y my-40">
-        <div className="">
-          <input
-            type="text"
-            className="search__bar w-200"
-            placeholder="Search by name or ID"
-          />
-          <select className="search__bar w-200" defaultValue={'default'}>
-            <option value="default"> Select Status</option>
-            <option value="Status 1"> Status 1</option>
-            <option value="Status 2"> Status 2</option>
-            <option value="Status 3"> Status 3</option>
-            <option value="Status 4"> Status 4</option>
-          </select>
-        </div>
-        <div className="">
-          <button className="btn btn-primary p-25" onClick={() => setNewOfficerModal(true)}>Add Officer</button>
-        </div>
-      </section>
-
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} size="small" aria-label="Officers Table">
-          <TableHead>
-            <TableRow>
-              {columns.map((column) => (
-                <TableCell>{column.label}</TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            <TableRow>
-              <TableCell className="b-r">
-                <div className="d-flex alc f-10 flex-start">
-                  <div className="user__avatar bg-success">
-                    <h3>AP</h3>
-                  </div>
-                  <div className="lheight13">
-                  <h4 className="f-300">Ahmed Peter</h4>
-                  <p className="sub__title">STF/09/2623</p>
-                  </div>
+      <div class="col-md-12">
+          <div class="ms-panel">
+            <div class="ms-panel-header">
+              <div class="d-flex justify-content-between">
+                <div class="ms-header-text">
+                  <h6>Social Activity</h6>
+                  <p>Quick overview on your social media platforms</p>
                 </div>
-              </TableCell>
-              <TableCell> Abuja [Garki]</TableCell>
-              <TableCell> talk2ahmedpeter@gmail.com</TableCell>
-              <TableCell> 0803 000 0000</TableCell>
-              <TableCell>
-                {" "}
-                <span className="badge bg-success">Active</span>{" "}
-              </TableCell>
-              <TableCell>
-                {" "}
-                <MoreVertIcon />{" "}
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="b-r">
-                <div className="d-flex alc f-10 flex-start">
-                  <div className="user__avatar bg-error">
-                    <h3>PY</h3>
-                  </div>
-                  <div className="lheight13">
-                  <h4 className="f-300">Philip Yahaya</h4>
-                  <p className="sub__title">STF/09/2623</p>
-                  </div>
-
-                  
-                </div>
-              </TableCell>
-              <TableCell> Abuja [Garki]</TableCell>
-              <TableCell> fakemail@outlook.com</TableCell>
-              <TableCell> 0803 000 0000</TableCell>
-              <TableCell>
-                {" "}
-                <span className="badge bg-error">Inactive </span>
-              </TableCell>
-              <TableCell>
-                {" "}
-                <MoreVertIcon />{" "}
-              </TableCell>
-            </TableRow>
-
-            <TableRow>
-              <TableCell className="b-r">
-                <div className="d-flex alc f-10 flex-start">
-                  <div className="user__avatar bg-success">
-                    <h3>PY</h3>
-                  </div>
-                  <div className="lheight13">
-                  <h4 className="f-300">Philip Yahaya</h4>
-                  <p className="sub__title">STF/09/2623</p>
-                  </div>
-                </div>
-              </TableCell>
-              <TableCell> Abuja [Garki]</TableCell>
-              <TableCell> fakemail@outlook.com</TableCell>
-              <TableCell> 0803 000 0000</TableCell>
-              <TableCell>
-                {" "}
-                <span className="badge bg-error">Inactive </span>
-              </TableCell>
-              <TableCell>
-                {" "}
-                <MoreVertIcon />{" "}
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="b-r">
-                <div className="d-flex alc f-10 flex-start">
-                  <div className="user__avatar bg-warning">
-                    <h3>DA</h3>
-                  </div>
-                  <div className="lheight13">
-                  <h4 className="f-300">Dennis Abdulmalik</h4>
-                  <p className="sub__title">STF/09/2623</p>
-                  </div>
-                  
-                </div>
-              </TableCell>
-              <TableCell> Abuja [Garki]</TableCell>
-              <TableCell> fakemail@outlook.com</TableCell>
-              <TableCell> 0803 000 0000</TableCell>
-              <TableCell>
-                {" "}
-                <span className="badge bg-error">Inactive </span>
-              </TableCell>
-              <TableCell>
-                {" "}
-                <MoreVertIcon />{" "}
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="b-r">
-                <div className="d-flex alc f-10 flex-start">
-                  <div className="user__avatar bg-error">
-                    <h3>MS</h3>
-                  </div>
-                  <div className="lheight13">
-                  <h4 className="f-300">Dennis Abdulmalik</h4> 
-                  <p className="sub__title">STF/09/2623</p>
-                  </div>
-                </div>
-              </TableCell>
-              <TableCell> Abuja [Garki]</TableCell>
-              <TableCell> fakemail@outlook.com</TableCell>
-              <TableCell> 0803 000 0000</TableCell>
-              <TableCell>
-                {" "}
-                <span className="badge bg-success">Active </span>
-              </TableCell>
-              <TableCell>
-                {" "}
-                <MoreVertIcon />{" "}
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </TableContainer>
-
-
-      {/* Modal for officers */}
-
-      <Modal
-          open={newOfficerModal}
-          onClose={handleModalClose}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={style}>
-            <div className="mb-35">
-              <Typography id="modal-modal-title">
-                <h4 className="summary__title t-xl title-case">
-                  Add Offcier
-                </h4>
-              </Typography>
-              <div className="s-divider"></div>
-            </div>
-<section className="flex__normal">
-  <div className="w-200">
-    <div className="profile_pic_holder b-round">
-            <img src={profile} className="profile_pic b-round"/>
-            <button className="btn btn-primary p-25 mt-15">Upload Photo</button>
-        
-    </div>
-    </div>
-            <form style={{width: '100%'}} >
-              
-              <section className="flex-container mb-lg">
-                <div className="pos-rel w100-m10 ">
-                        <label> Firstname</label>
-                        <input
-                        type="text"
-                        className="form-control-input "
-                        name="username"
-                        placeholder="e.g Adamu"
-                        />
-                    </div>
-                    <div className="pos-rel w100-m10 ">
-                        <label> Lastname</label>
-                        <input
-                        type="text"
-                        className="form-control-input "
-                        name="username"
-                        placeholder="e.g Norris"
-                        />
-                    </div>
-                    <div className="pos-rel w100-m10 ">
-                        <label> email address</label>
-                        <input
-                        type="email"
-                        className="form-control-input "
-                        name="username"
-                        placeholder="email@domain.com"
-                        />
-                    </div>
-              </section>
-
-              <section className="flex-container mb-lg">
-                <div className="pos-rel w100-m10 ">
-                        <label> phone number</label>
-                        <input
-                        type="number"
-                        className="form-control-input "
-                        name="username"
-                        placeholder="e.g. 0803 000 0000"
-                        />
-                    </div>
-                    <div className="pos-rel w100-m10 ">
-                    <label className="mb-7"> Nationality</label>
-                        <select className="search__bar w-100" defaultValue={'default'}>
-                            <option value="default"> Select Nationality</option>
-                            <option value="Status 1"> Status 1</option>
-                            <option value="Status 2"> Status 2</option>
-                            <option value="Status 3"> Status 3</option>
-                            <option value="Status 4"> Status 4</option>
-                        </select>
-                    </div>
-                    <div className="pos-rel w100-m10 ">
-                    <label className="mb-7"> Local Government Area</label>
-                        <select className="search__bar w-100" defaultValue={'default'}>
-                            <option value="default"> Select LGA</option>
-                            <option value="Status 1"> Status 1</option>
-                            <option value="Status 2"> Status 2</option>
-                            <option value="Status 3"> Status 3</option>
-                            <option value="Status 4"> Status 4</option>
-                        </select>
-                    </div>
-              </section>
-
-              <section className="flex-container mb-lg">
-                
-                    <div className="pos-rel w100-m10 ">
-                    <label className="mb-7">  Branch</label>
-                        <select className="search__bar w-100" defaultValue={'default'}>
-                            <option value="default"> Select Branch</option>
-                            <option value="Status 1"> Status 1</option>
-                            <option value="Status 2"> Status 2</option>
-                            <option value="Status 3"> Status 3</option>
-                            <option value="Status 4"> Status 4</option>
-                        </select>
-                    </div>
-                    <div className="pos-rel w100-m10 "></div>
-                    <div className="pos-rel w100-m10 "></div>
-              </section>
-              <section className="flex-container mb-lg">
-                    <div className="pos-rel w100-m10 ">
-                    <label className="mb-7">  Address</label>
-                        <textarea placeholder="enter home address" className="form-textarea w-100"></textarea>
-                    </div>
-                    
-                    <div className="pos-rel w100-m10"></div>
-              </section>
-<div className="flex__normal w-30 pull-right mt-35">
-              <button onClick={handleModalClose} className="btn btn-secondary p-25 pull-right mr-10">
-                Cancel
-              </button>
-              <button className="btn btn-primary p-25 pull-right">
-                Save
-              </button>
+                <button type="button" class="btn btn-outline-primary ms-graph-metrics" name="button">Add New Account</button>
               </div>
-            </form>
-            </section>
-          </Box>
-        </Modal>
+            </div>
+            <div class="ms-panel-body pb-0">
+              <div class="row">
 
+                <div class="col-xl-3 col-md-6">
+                  <div class="ms-card card-twitter ms-widget ms-infographics-widget">
+                    <div class="ms-card-body media">
+                      <div class="media-body">
+                        <h6>Total Tweets</h6>
+                        <p class="ms-card-change"> <i class="material-icons">arrow_upward</i> 12,039</p>
+                        <p class="fs-12">48% From Last 24 Hours</p>
+                      </div>
+                    </div>
+                    <i class="fab fa-twitter-square"></i>
+                  </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                  <div class="ms-card card-linkedin ms-widget ms-infographics-widget">
+                    <div class="ms-card-body media">
+                      <div class="media-body">
+                        <h6>Total Followers</h6>
+                        <p class="ms-card-change"> <i class="material-icons">arrow_upward</i> 3,819</p>
+                        <p class="fs-12">48% From Last 24 Hours</p>
+                      </div>
+                    </div>
+                    <i class="fab fa-linkedin"></i>
+                  </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                  <div class="ms-card card-facebook ms-widget ms-infographics-widget">
+                    <div class="ms-card-body media">
+                      <div class="media-body">
+                        <h6>Total Likes</h6>
+                        <p class="ms-card-change"> <i class="material-icons">arrow_upward</i> 9,289</p>
+                        <p class="fs-12">48% From Last 24 Hours</p>
+                      </div>
+                    </div>
+                    <i class="fab fa-facebook"></i>
+                  </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                  <div class="ms-card card-instagram ms-widget ms-infographics-widget">
+                    <div class="ms-card-body media">
+                      <div class="media-body">
+                        <h6>Total Followers</h6>
+                        <p class="ms-card-change"> <i class="material-icons">arrow_upward</i> 7,658</p>
+                        <p class="fs-12">48% From Last 24 Hours</p>
+                      </div>
+                    </div>
+                    <i class="fab fa-instagram"></i>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+      <div class="col-md-12">
+          <div class="ms-panel ms-crypto-orders-expanded">
+            <div class="ms-panel-header">
+              <div class="d-flex justify-content-between">
+                <div class="ms-header-text">
+                  <h6>Order History</h6>
+                  <p>Track your active orders</p>
+                </div>
+
+              </div>
+            </div>
+            <div class="ms-panel-body p-0">
+              <div class="table-responsive">
+                <table class="table table-hover thead-primary ">
+                  <thead>
+                    <tr>
+                      <th scope="col">Date</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Product ID</th>
+                      <th scope="col">Amount</th>
+                      <th scope="col">Category</th>
+                      <th scope="col">Orders</th>
+                      <th scope="col">Repeats</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>12.01.2020</td>
+                      <td>Hemp Oil</td>
+                      <td>#TR137381</td>
+                      <td>$900.50</td>
+                      <td> Oil </td>
+                      <td class="ms-trend"> <canvas id="trend-01"></canvas> </td>
+                      <td>$5.85</td>
+                    </tr>
+                    <tr>
+                      <td>11.01.2020</td>
+                      <td>Gummy Bears</td>
+                      <td>#TR371893</td>
+                      <td>$335.50</td>
+                      <td> Edibles </td>
+                      <td class="ms-trend"> <canvas id="trend-02"></canvas> </td>
+                      <td>$5.85</td>
+                    </tr>
+                    <tr>
+                      <td>10.01.2020</td>
+                      <td>Mango Kush</td>
+                      <td>#TR137381</td>
+                      <td>$378.50</td>
+                      <td> Plants </td>
+                      <td class="ms-trend"> <canvas id="trend-03"></canvas> </td>
+                      <td>$5.85</td>
+                    </tr>
+                    <tr>
+                      <td>09.01.2020</td>
+                      <td>Purple Haze</td>
+                      <td>#TR371893</td>
+                      <td>$219.30</td>
+                      <td> FLowers</td>
+                      <td class="ms-trend"> <canvas id="trend-04"></canvas> </td>
+                      <td>$5.85</td>
+                    </tr>
+                    <tr>
+                      <td>08.01.2020</td>
+                      <td>UK Cheese</td>
+                      <td>#TR137381</td>
+                      <td>$438.50</td>
+                      <td>Leafs</td>
+                      <td class="ms-trend"> <canvas id="trend-05"></canvas> </td>
+                      <td>$5.85</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
     </section>
   );
 };

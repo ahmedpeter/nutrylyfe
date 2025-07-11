@@ -45,7 +45,7 @@
 }
 
 .profile > div {
-    font-family: 'Manrope';
+    /* font-family: 'Manrope'; */
     font-size: 36px;
     color: white;
 }
@@ -94,7 +94,7 @@
 .header__info > h4 {
     
     line-height: 1.2em;
-    color: #2d2d2d;
+    /* color: #2d2d2d; */
     font-family: var(--primary-font)!important;
     font-size: 12px;
     font-weight: 700;
@@ -106,6 +106,9 @@
 }
 .c-grey {
     color: #252525;
+}
+.c-chalk {
+    color: var(--color-chalk);
 }
 /* .sidebar{
     width: 6%;
@@ -133,7 +136,7 @@
     display: flex;
     padding: 10px;
     cursor: pointer;
-    color: #252525;
+    color: var(--color-chalk);
     padding: 10px 25px;
     text-align: center;
     cursor: pointer;
@@ -160,7 +163,7 @@
     width: 1em;
     height: 1em;
     margin-right: 10px!important;
-    color: #707070!important;
+    color: var(--color-chalk)!important;
     display: inline-block;
     fill: currentColor;
     -webkit-flex-shrink: 0;
