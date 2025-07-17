@@ -5,7 +5,6 @@ import ForgotPassword from "./auth/ForgotPassword";
 import ResetPassword from "./auth/ResetPassword";
 import Sidebar from "./builder/Sidebar";
 import Header from "./builder/Header";
-import Dashboard from "./Dashboard";
 import ProductDetails from "./Products/details";
 import Products from "./Products";
 import NewProduct from "./Products/NewProduct";
@@ -15,7 +14,8 @@ import UserProfile from "./Networkers/UserProfile";
 import AddNetworker from "./Networkers/AddNetworker";
 import Stockiest from "./Stockiest";
 import Packages from "./Packages";
-
+import Dashboard from "./";
+// import Dashboard from "./Dashboard/index.js";
 
 function Layout() {
   const location = useLocation();
