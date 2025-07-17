@@ -63,7 +63,7 @@ const Dashboard = () => {
   const getUserProfile = async () => {
     setLoading(true);
     if (!userInfo.user.user.token) {
-      navigate("/auth/login");
+      navigate("/");
     }
     const response = await query({
       method: "GET",
@@ -86,7 +86,7 @@ const Dashboard = () => {
   const getAvailableProducts = async () => {
     setLoading(true);
     if (!userInfo.user.user.token) {
-      navigate("/auth/login");
+      navigate("/");
     }
     // console.log(userType);
     const response = await query({
@@ -120,7 +120,7 @@ const Dashboard = () => {
   const getAllProducts = async () => {
     setLoading(true);
     if (!userInfo.user.user.token) {
-      navigate("/auth/login");
+      navigate("/");
     }
     // console.log(userType);
     const response = await query({

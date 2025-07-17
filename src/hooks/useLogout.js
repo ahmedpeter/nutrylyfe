@@ -23,7 +23,7 @@ const useLogout = (userInfo) => {
         user: { token: "" },
         userDetails: {} 
       }));
-      navigate("/auth/login");
+      navigate("/");
     }
   };
 

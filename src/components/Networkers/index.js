@@ -48,7 +48,7 @@ const Networkers = () => {
   const getLinkedNetworkers = async () => {
     setLoading(true);
     if (!userInfo.user.user.token) {
-      navigate("/auth/login");
+      navigate("/");
     }
     // console.log(userType);
     const response = await query({
@@ -121,7 +121,7 @@ const Networkers = () => {
   const getAllPackages = async () => {
     setLoading(true);
     if (!userInfo.user.user.token) {
-      navigate("/auth/login");
+      navigate("/");
     }
     const response = await query({
       method: "GET",

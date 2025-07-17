@@ -66,7 +66,7 @@ const ProductDetails = () => {
   const getProductDetails = async () => {
     setLoading(true);
     if (!userInfo.user.user.token) {
-      navigate("/auth/login");
+      navigate("/");
     }
     // console.log(userType);
     const response = await query({

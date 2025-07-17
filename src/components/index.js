@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import { BrowserRouter as Router, Route, Routes,  useLocation, useNavigate } from "react-router-dom";
-import Login from "./auth/login";
+import Login from "./";
 import ForgotPassword from "./auth/ForgotPassword";
 import ResetPassword from "./auth/ResetPassword";
 import Sidebar from "./builder/Sidebar";
@@ -14,7 +14,7 @@ import UserProfile from "./Networkers/UserProfile";
 import AddNetworker from "./Networkers/AddNetworker";
 import Stockiest from "./Stockiest";
 import Packages from "./Packages";
-// import Dashboard from "./Dashboard2";
+import Dashboard from "./Dashboard2";
 
 
 function Layout() {
@@ -43,7 +43,7 @@ function Layout() {
         </>
       )}
     <Routes>
-          <Route path="/auth/login" element={<Login />} />
+          <Route path="/" element={<Login />} />
           {/* <Route path="/" element={<Login />} /> */}
               <Route path="/auth/forgot-password" element={<ForgotPassword />} />
               <Route path="/auth/reset-password" element={<ResetPassword />} />
@@ -52,7 +52,7 @@ function Layout() {
       <div className="main__content">
         <Routes>
           
-          {/* <Route path="/app/dashboard" element={<Dashboard />} /> */}
+          <Route path="/app/dashboard" element={<Dashboard />} />
           <Route path="/app/product/:prodId/details" element={<ProductDetails />} />
           <Route path="/app/networkers" element={<Networkers />} />
           <Route path="/app/user/profile" element={<UserProfile />} />

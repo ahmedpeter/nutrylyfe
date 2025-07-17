@@ -75,7 +75,7 @@ const formik = useFormik({
   const getAllPackages = async () => {
     setLoading(true);
     if (!userInfo.user.user.token) {
-      navigate("/auth/login");
+      navigate("/");
     }
     // console.log(userType);
     const response = await query({
