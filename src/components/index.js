@@ -14,7 +14,7 @@ import UserProfile from "./Networkers/UserProfile";
 import AddNetworker from "./Networkers/AddNetworker";
 import Stockiest from "./Stockiest";
 import Packages from "./Packages";
-import Dashboard from "./Dashboard2";
+// import Dashboard from "./Dashboard2";
 
 
 function Layout() {
@@ -52,7 +52,7 @@ function Layout() {
       <div className="main__content">
         <Routes>
           
-          <Route path="/app/dashboard" element={<Dashboard />} />
+          {/* <Route path="/app/dashboard" element={<Dashboard />} /> */}
           <Route path="/app/product/:prodId/details" element={<ProductDetails />} />
           <Route path="/app/networkers" element={<Networkers />} />
           <Route path="/app/user/profile" element={<UserProfile />} />
