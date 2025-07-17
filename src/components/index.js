@@ -14,7 +14,7 @@ import UserProfile from "./Networkers/UserProfile";
 import AddNetworker from "./Networkers/AddNetworker";
 import Stockiest from "./Stockiest";
 import Packages from "./Packages";
-import Dashboard from "./Dashboard2";
+import Dashboard from "./dashboard";
 
 
 function Layout() {
