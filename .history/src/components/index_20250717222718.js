@@ -14,7 +14,7 @@ import UserProfile from "./Networkers/UserProfile";
 import AddNetworker from "./Networkers/AddNetworker";
 import Stockiest from "./Stockiest";
 import Packages from "./Packages";
-import Dashboard from "./Dashboard/index.js";
+import Dashboard from "./Dashboard/index.";
 
 function Layout() {
   const location = useLocation();
