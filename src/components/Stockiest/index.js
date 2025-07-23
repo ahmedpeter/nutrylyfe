@@ -16,6 +16,7 @@ const Stockiest = () => {
   const [newStockiestModal, setNewStockiestModal] = useState(false);
   const handleModalClose = () => setNewStockiestModal(false);
   const [packageList, setPackageList] = useState([]);
+  const [stockiestList, setStockiestList] = useState([]);
   const [selectedState, setSelectedState] = useState('');
   const [lgas, setLgas] = useState([]);
   const userInfo = useSelector((state) => state);
@@ -85,10 +86,33 @@ const formik = useFormik({
       token: userInfo?.user?.user.token,
     });
     console.log(response);
+    getAllStockiest();
     if (response.success) {
       setLoading(false);
       console.log(response);
       setPackageList(response?.data?.data.packages);
+    } else {
+      console.log(response);
+      setAlert(response?.data?.message);
+      setLoading(false);
+    }
+  };
+  const getAllStockiest = async () => {
+    setLoading(true);
+    if (!userInfo.user.user.token) {
+      navigate("/");
+    }
+    // console.log(userType);
+    const response = await query({
+      method: "GET",
+      url: "/networker/stockist/get-all",
+      token: userInfo?.user?.user.token,
+    });
+    console.log(response);
+    if (response.success) {
+      setLoading(false);
+      console.log(response);
+      setStockiestList(response?.data?.data.data);
     } else {
       console.log(response);
       setAlert(response?.data?.message);
@@ -158,77 +182,51 @@ const formik = useFormik({
                           <tr>
                             <th scope="col">Account Name</th>
                             <th scope="col">Ref ID</th>
-                            <th scope="col">Username</th>
-                            <th scope="col">Package</th>
-                            <th scope="col">Contact</th>
+                            <th scope="col">State</th>
+                            <th scope="col">LGA</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Phone</th>
                             <th scope="col">Reg. Date</th>
                           </tr>
                         </thead>
                         <tbody>
+                        {stockiestList?.length > 0 &&
+                            stockiestList.map((item, i) => (
                           <tr>
-                            <td>Daniel Bwala</td>
+                            <td>{item.name}</td>
                             <td>
-                            #TR34351
+                            {item.ref_id}
                             </td>
-                            <td>bwala</td>
-                            <td>Gold</td>
-                            <td>234 80 123 456 789
-
-                            </td>
-                            <td>12.01.2020</td>
+                            <td>{item.state}</td>
+                            <td>{item.lga}</td>
+                            <td>{item.email}</td>
+                            <td>{item.phone}</td>
+                            <td>{moment(item.created_at).format(
+                              "LL")}</td>
                           </tr>
-                          <tr>
-                            <td>Daniel Bwala</td>
-                            <td>
-                            #TR34351
-                            </td>
-                            <td>bwala</td>
-                            <td>Gold</td>
-                            <td>234 80 123 456 789
-
-                            </td>
-                            <td>12.01.2020</td>
-                          </tr>
-                          <tr>
-                            <td>Daniel Bwala</td>
-                            <td>
-                            #TR34351
-                            </td>
-                            <td>bwala</td>
-                            <td>Gold</td>
-                            <td>234 80 123 456 789
-
-                            </td>
-                            <td>12.01.2020</td>
-                          </tr>
-                          <tr>
-                            <td>Daniel Bwala</td>
-                            <td>
-                            #TR34351
-                            </td>
-                            <td>bwala</td>
-                            <td>Gold</td>
-                            <td>234 80 123 456 789
-
-                            </td>
-                            <td>12.01.2020</td>
-                          </tr>
-                          <tr>
-                            <td>Daniel Bwala</td>
-                            <td>
-                            #TR34351
-                            </td>
-                            <td>bwala</td>
-                            <td>Gold</td>
-                            <td>234 80 123 456 789
-
-                            </td>
-                            <td>12.01.2020</td>
-                          </tr>
+                            ))}
                           
                         </tbody>
                       </table>
                     </div>
+                    {!loading && stockiestList?.length === 0 && (
+              <>
+                <p
+                  className="text-center"
+                  style={{
+                    fontWeight: 600,
+                    left: "50%",
+                    position: "absolute",
+                    top: "50%",
+                    transform: "translate(-50%, -50%)",
+                  }}
+                >
+                  <span class="mdi mdi-ffolder-open-outline text-primary me-1"></span>{" "}
+                  <br />
+                  Oops! There are no stockiest yet! &nbsp;
+                </p>
+              </>
+            )}
                   </div>
                   <div role="tabpanel" class="tab-pane fade" id="s-orders">
                     <div class="table-responsive">

@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
-import { BrowserRouter as Router, Route, Routes,  useLocation, useNavigate } from "react-router-dom";
-import Login from "./";
+import { BrowserRouter as Router, Route, Routes,  useLocation, useNavigate, Navigate } from "react-router-dom";
+import Login from "./auth/login";
 import ForgotPassword from "./auth/ForgotPassword";
 import ResetPassword from "./auth/ResetPassword";
 import Sidebar from "./builder/Sidebar";
@@ -43,8 +43,8 @@ function Layout() {
         </>
       )}
     <Routes>
-          <Route path="/" element={<Login />} />
-          {/* <Route path="/" element={<Login />} /> */}
+              <Route path="/" element={<Navigate to="/auth/login" replace />} />
+              <Route path="/auth/login" element={<Login />} />
               <Route path="/auth/forgot-password" element={<ForgotPassword />} />
               <Route path="/auth/reset-password" element={<ResetPassword />} />
     </Routes>

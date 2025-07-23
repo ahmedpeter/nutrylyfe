@@ -83,10 +83,11 @@ const Products = () => {
         bodyData: values,
         token: userInfo?.user?.user.token,
       });
-      if (response.status) {
+      if (response.status || response.success) {
         console.log(response);
         setAlert(response.message);
         setAddProductModal(false);
+        setIsEditMode(false);
         getAllProducts();
         setTimeout(() => setAlert(""), 5000);
       } else {
@@ -182,7 +183,7 @@ const Products = () => {
                               <div class="ms-card-img">
                                 <img
                                   src={
-                                    `http://api.nutry-lyfe.pmall.com.ng/api` +
+                                    `http://api.nutry-lyfe.pmall.com.ng` +
                                     product.image
                                   }
                                   alt={product.name}

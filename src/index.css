@@ -3329,6 +3329,7 @@ input:checked+.ms-switch-slider.ms-switch-dark {
 
 .ms-card-body p {
   color: #878793;
+  font-size: 12px;
 }
 
 .ms-card-footer {
