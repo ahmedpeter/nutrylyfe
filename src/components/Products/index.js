@@ -192,12 +192,13 @@ const Products = () => {
                               <div class="ms-card-body">
                                 <div class="ms-panel-custom">
                                   <h4>{product.name}</h4>
-                                  <span class="ms-text-primary">
+                                  <h4 class="ms-text-primary">
                                     {currency(product.price)}
-                                  </span>
+                                  </h4>
                                 </div>
 
                                 <p>{product.description}</p>
+                                {userInfo?.user.user.user_type === "Admin" && (
                                 <div class="ms-panel-custom">
                                   <button
                                     class="btn btn-primary mr-2   ms-custom-btn"
@@ -220,6 +221,7 @@ const Products = () => {
                                     Delete
                                   </button>
                                 </div>
+                                )}
                               </div>
                             </div>
                           </div>

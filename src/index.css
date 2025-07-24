@@ -3332,6 +3332,35 @@ input:checked+.ms-switch-slider.ms-switch-dark {
   font-size: 12px;
 }
 
+.all-center {
+  align-items: center;
+  justify-content: center;
+}
+.cart-item-count .count {
+  border: 2px solid #eee;
+    border-radius: 50%;
+    cursor: pointer;
+    height: 25px;
+    width: 25px;
+    margin: 0 5px;
+}
+.floating__table {
+  width: 40%;
+    position: absolute;
+    bottom: 30px;
+    right: 0;
+    background-color: white;
+    color: #4f8dca;
+    /* border-color: #4f8dca; */
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+.f-12 {
+  font-size: 12px;
+}
+.flex {
+  display: flex;
+}
+
 .ms-card-footer {
   border-top: 1px solid rgba(0, 0, 0, 0.1);
 }

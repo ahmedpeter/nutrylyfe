@@ -284,7 +284,7 @@ const Networkers = () => {
               >
                 <div className="form-row" style={{ marginTop: "5%" }}>
                   {/* Full Name */}
-                  <div className="col-xl-8 col-md-12">
+                  <div className="col-xl-6 col-md-12">
                     <label htmlFor="name">Member's Full Name</label>
                     <div className="input-group">
                       <input
@@ -306,7 +306,7 @@ const Networkers = () => {
                   </div>
 
                   {/* Username */}
-                  <div className="col-xl-4 col-md-12">
+                  <div className="col-xl-3 col-md-12">
                     <label htmlFor="username">Choose a username</label>
                     <div className="input-group">
                       <input
@@ -328,9 +328,57 @@ const Networkers = () => {
                       </div>
                     )}
                   </div>
+                   {/* Store Location (State) */}
+        <div className="col-xl-3 col-md-12">
+        <label htmlFor="state">Store Location (State)</label>
+          <div className="input-group">
+            <select
+              className="form-control"
+              id="state"
+              name="state"
+              onChange={handleStateChange} value={selectedState}
+              onBlur={formik.handleBlur}
+              required
+            > 
+            <option value="">Select State</option>
+                {statesAndLgas.map(({ state }) => (
+                    <option key={state} value={state}>{state}</option>
+                ))}
 
+            </select>
+          </div>
+          {formik.touched.state && formik.errors.state && (
+            <div className="text-danger">{formik.errors.state}</div>
+          )}
+        </div>
+
+{/* LGA */}
+<div className="col-xl-3 col-md-12">
+          <label htmlFor="lga">Select LGA</label>
+          <div className="input-group">
+            <select
+              className="form-control"
+              name="lga"
+              value={formik.values.lga}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              required
+              id="lga" disabled={!lgas.length}
+            >
+              <option value="">Select LGA</option>
+              {lgas.map((lga) => (
+          <option key={lga} value={lga}>{lga}</option>
+        ))}
+            </select>
+          </div>
+          {formik.touched.lga && formik.errors.lga && (
+            <div className="text-danger">{formik.errors.lga}</div>
+          )}
+        </div>
+{/* NL-567619 */}
                   {/* Placement ID */}
-                  <div className="col-xl-6 col-md-12">
+                  {/* {myNetworkList?.length > 0 &&( */}
+                  <div className="col-xl-3 col-md-12">
                     <label htmlFor="ref_id">Placement Member Id</label>
                     <div className="input-group">
                       <select
@@ -340,7 +388,6 @@ const Networkers = () => {
                         value={formik.values.ref_id}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        required
                         disabled={isEditMode}
                       >
                         <option value="">Select an option</option>
@@ -357,8 +404,33 @@ const Networkers = () => {
                     )}
                   </div>
 
+
+<div className="col-xl-3 col-md-12">
+                    <label htmlFor="ref_id">Set your Ref Id</label>
+                    <div className="input-group">
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="ref_id"
+                        name="ref_id"
+                        placeholder=""
+                        value={formik.values.ref_id}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        required
+                        disabled={isEditMode}
+                      />
+                    </div>
+                    {formik.touched.ref_id && formik.errors.ref_id && (
+                      <div className="text-danger">
+                        {formik.errors.ref_id}
+                      </div>
+                    )}
+                  </div>
+
+
                   {/* Binary Position */}
-                  <div className="col-xl-6 col-md-12">
+                  <div className="col-xl-3 col-md-12">
                     <label htmlFor="binaryPosition">Binary Position</label>
                     <div className="input-group">
                       <select

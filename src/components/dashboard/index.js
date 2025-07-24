@@ -1,6 +1,6 @@
 // import * as React from "react";
 import * as React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import currency from "../../utils/formatCurrency";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
@@ -14,11 +14,13 @@ import ConvertPackage from "../../helpers/convertPackages";
 const Dashboard = () => {
   const [productList, setProductList] = useState(null);
   const [availableProducts, setAvailableProducts] = useState(null);
+  const [availableOrders, setAvailableOrders] = useState(null);
   const handleModalClose = () => setUpdateProductModal(false);
   const [userProfile, setUserProfile] = useState("");
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [alertText, setAlert] = useState("");
+  const [stockiestList, setStockiestList] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isEditMode, setIsEditMode] = useState(false);
   const [updateProductModal, setUpdateProductModal] = useState(false);
@@ -71,9 +73,11 @@ const Dashboard = () => {
       token: userInfo?.user?.user.token,
     });
     console.log(response);
+    getAllOrders()
     if (response.success) {
       setLoading(false);
       console.log(response);
+      getAllStockiest();
       setUserProfile(response?.data.data.user);
     } else {
       console.log(response);
@@ -83,6 +87,28 @@ const Dashboard = () => {
     console.log(userProfile);
   };
 
+  const getAllStockiest = async () => {
+    setLoading(true);
+    if (!userInfo.user.user.token) {
+      navigate("/");
+    }
+    // console.log(userType);
+    const response = await query({
+      method: "GET",
+      url: "/networker/stockist/get-all",
+      token: userInfo?.user?.user.token,
+    });
+    console.log(response);
+    if (response.success) {
+      setLoading(false);
+      console.log(response);
+      setStockiestList(response?.data?.data.data);
+    } else {
+      console.log(response);
+      setAlert(response?.data?.message);
+      setLoading(false);
+    }
+  };
   const getAvailableProducts = async () => {
     setLoading(true);
     if (!userInfo.user.user.token) {
@@ -107,6 +133,66 @@ const Dashboard = () => {
       setLoading(false);
     }
   };
+  const getAllOrders = async () => {
+    setLoading(true);
+    if (!userInfo.user.user.token) {
+      navigate("/");
+    }
+    // console.log(userType);
+    const response = await query({
+      method: "GET",
+      // url: "/stockist/products/get-system-products",
+      url: "/stockist/orders/all",
+      token: userInfo?.user?.user.token,
+    });
+    console.log(response);
+    if (response.success) {
+      setLoading(false);
+      console.log(response);
+      setAvailableOrders(response?.data?.data);
+    } else {
+      console.log(response);
+      setAlert(response?.data?.message);
+      setTimeout(() => setAlert(""), 5000);
+      setLoading(false);
+    }
+  };
+
+
+  const handleStockiestClick = (id) => {
+    navigate(`/app/product/stockiest/${id}`);
+  };
+
+
+  const groupedByUser = useMemo(() => {
+    if (!availableOrders || !Array.isArray(availableOrders)) return [];
+  
+    const grouped = availableOrders.reduce((acc, order) => {
+      const userId = order.user_id;
+  
+      if (!acc[userId]) {
+        acc[userId] = {
+          user: order.user,
+          orders: [],
+        };
+      }
+  
+      acc[userId].orders.push({
+        id: order.id,
+        orderID: order.orderID,
+        total: order.total,
+        status: order.status,
+        created_at: order.created_at,
+        items: order.items,
+        payment: order.payment,
+      });
+  
+      return acc;
+    }, {});
+  console.log(Object.values(grouped));
+    return Object.values(grouped);
+  }, [availableOrders]);
+
 
   useEffect(() => {
     console.log(userInfo);
@@ -229,8 +315,6 @@ const Dashboard = () => {
                   <i class="fab fa-twitter-square"></i>
                 </div>
               </div>
-
-
             </div>
           </div>
           )}
@@ -382,7 +466,7 @@ const Dashboard = () => {
                     <div class="d-flex justify-content-between">
                       <div class="ms-header-text">
                         <h6>Available Products in Store</h6>
-                        <p>Update Your Product Status and Availability</p>
+                        <p>Products you currently have at your center for pickup</p>
                       </div>
                     </div>
                   </div>
@@ -483,7 +567,7 @@ const Dashboard = () => {
                                       setIsEditMode(true);
                                     }}
                                   >
-                                    <i class="fas fa-pencil-alt"></i>
+                                    Update Stock
                                   </div>
                                 </td>
                               </tr>
@@ -522,10 +606,11 @@ const Dashboard = () => {
                       </tr>
                     </thead>
                     <tbody>
+                    {groupedByUser.map((group) => (
                       <tr>
-                        <td>12.01.2020</td>
-                        <td>Hemp Oil</td>
-                        <td>#TR137381</td>
+                        <td>{moment(group.created_at).format("lll")}</td>
+                        <td>{group.user.name}</td>
+                        <td>{group.user.my_ref_id}</td>
                         <td>$900.50</td>
                         <td> Oil </td>
 
@@ -534,6 +619,7 @@ const Dashboard = () => {
                           <span class="badge badge-success">Completed</span>
                         </td>
                       </tr>
+                      ))}
                       <tr>
                         <td>11.01.2020</td>
                         <td>Gummy Bears</td>
@@ -595,30 +681,24 @@ const Dashboard = () => {
                 <p class="fs-9 mt-7">See all</p>
               </div>
               <div class="ms-panel-body p-0">
-                <div class="ms-social-media-followers">
-                  <div class="ms-social-grid">
-                    <i class="fas fa-shopping-cart bg-linkedin"></i>
-                    <p class="ms-text-dark">Stacey Stores</p>
-                    <span>Abuja (Kubwa)</span>
-                  </div>
-                  <div class="ms-social-grid">
-                    <i class="fas fa-shopping-cart bg-linkedin"></i>
-                    <p class="ms-text-dark">Fortune's Warehouse</p>
-                    <span>Lagos (Ikoyi)</span>
-                  </div>
+            {stockiestList?.length > 0 &&
+            Array.from({ length: Math.ceil(stockiestList.length / 2) }, (_, rowIndex) => {
+              const start = rowIndex * 2;
+              const pair = stockiestList.slice(start, start + 2);
+
+              return (
+                <div className="ms-social-media-followers" key={rowIndex}>
+                  {pair.map((item, i) => (
+                    <div className="ms-social-grid pointer" key={i} onClick={() => handleStockiestClick(item.id)}>
+                      <i className="fas fa-shopping-cart bg-linkedin"></i>
+                      <p className="ms-text-dark">{item.name}</p>
+                      <span>{item.state} ({item.lga})</span>
+                    </div>
+                  ))}
                 </div>
-                <div class="ms-social-media-followers">
-                  <div class="ms-social-grid">
-                    <i class="fas fa-shopping-cart bg-linkedin"></i>
-                    <p class="ms-text-dark">Shantel's Mall</p>
-                    <span>Edo (Benin)</span>
-                  </div>
-                  <div class="ms-social-grid">
-                    <i class="fas fa-shopping-cart bg-linkedin"></i>
-                    <p class="ms-text-dark">Lois' Stores</p>
-                    <span>Cross River (Calabar)</span>
-                  </div>
-                </div>
+              );
+            })
+          }  
               </div>
             </div>
           </div>

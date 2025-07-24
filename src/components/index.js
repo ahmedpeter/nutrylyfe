@@ -7,6 +7,7 @@ import Sidebar from "./builder/Sidebar";
 import Header from "./builder/Header";
 import ProductDetails from "./Products/details";
 import Products from "./Products";
+import Cart from "./Products/cart";
 import NewProduct from "./Products/NewProduct";
 import NewStockiest from "./Stockiest/NewStockiest";
 import Networkers from "./Networkers";
@@ -15,6 +16,7 @@ import AddNetworker from "./Networkers/AddNetworker";
 import Stockiest from "./Stockiest";
 import Packages from "./Packages";
 import Dashboard from "./dashboard";
+import StockiestProducts from "./Stockiest/StockiestProduct";
 
 
 function Layout() {
@@ -54,7 +56,9 @@ function Layout() {
           
           <Route path="/app/dashboard" element={<Dashboard />} />
           <Route path="/app/product/:prodId/details" element={<ProductDetails />} />
+          <Route path="/app/product/stockiest/:stockiestId" element={<StockiestProducts />} />
           <Route path="/app/networkers" element={<Networkers />} />
+          <Route path="/app/cart" element={<Cart />} />
           <Route path="/app/user/profile" element={<UserProfile />} />
           <Route path="/app/networker/new" element={<AddNetworker />} />
           <Route path="/app/stockiest" element={<Stockiest />} />

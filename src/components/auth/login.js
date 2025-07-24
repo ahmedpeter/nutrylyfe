@@ -144,7 +144,7 @@ const Login = () => {
               name="username"
               onChange={formik.handleChange}
               value={formik.values.username}
-              placeholder="talk2ahmedpeter@gmail.com"
+              placeholder="example@email.com"
               error={
                 formik.touched.username && formik.errors.username
                   ? formik.errors.username
