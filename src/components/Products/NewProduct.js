@@ -213,7 +213,7 @@ const formik = useFormik({
         formData.append("file", files[0]);
 
         fetch(
-          `https://nutry.pmall.com.ng//api/admin/admin-products/product/upload-file`,
+          `https://nutry.pmall.com.ng/api/admin/admin-products/product/upload-file`,
           {
             method: "POST",
             headers: {

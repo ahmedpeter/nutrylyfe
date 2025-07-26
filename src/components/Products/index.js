@@ -286,7 +286,7 @@ const Products = () => {
                           formData.append("file", files[0]);
                           setLoading(true);
                           fetch(
-                            `https://nutry.pmall.com.ng//api/admin/admin-products/product/upload-file`,
+                            `https://nutry.pmall.com.ng/api/admin/admin-products/product/upload-file`,
                             {
                               method: "POST",
                               headers: {
