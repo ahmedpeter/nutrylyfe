@@ -222,7 +222,7 @@ const ProductDetails = () => {
         formData.append("file", files[0]);
         setLoading(true);
         fetch(
-          `http://api.nutry-lyfe.pmall.com.ng/api/admin/admin-products/product/upload-file`,
+          `https://nutry.pmall.com.ng//api/admin/admin-products/product/upload-file`,
           {
             method: "POST",
             headers: {

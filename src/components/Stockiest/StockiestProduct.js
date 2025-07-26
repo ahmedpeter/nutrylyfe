@@ -135,7 +135,7 @@ const clearCart = () => {
                               <div class="ms-card-img">
                                 <img
                                   src={
-                                    `http://api.nutry-lyfe.pmall.com.ng` +
+                                    `https://nutry.pmall.com.ng/` +
                                     product.product.image
                                   }
                                   alt={product.product.name}

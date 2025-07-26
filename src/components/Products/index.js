@@ -39,7 +39,7 @@ const Products = () => {
       console.log(response);
       setProductList(response?.data?.data.data);
       console.log(
-        `http://api.nutry-lyfe.pmall.com.ng` +
+        `https://nutry.pmall.com.ng/` +
           response?.data?.data.data[0].image
       );
     } else {
@@ -183,7 +183,7 @@ const Products = () => {
                               <div class="ms-card-img">
                                 <img
                                   src={
-                                    `http://api.nutry-lyfe.pmall.com.ng` +
+                                    `https://nutry.pmall.com.ng/` +
                                     product.image
                                   }
                                   alt={product.name}
@@ -286,7 +286,7 @@ const Products = () => {
                           formData.append("file", files[0]);
                           setLoading(true);
                           fetch(
-                            `http://api.nutry-lyfe.pmall.com.ng/api/admin/admin-products/product/upload-file`,
+                            `https://nutry.pmall.com.ng//api/admin/admin-products/product/upload-file`,
                             {
                               method: "POST",
                               headers: {

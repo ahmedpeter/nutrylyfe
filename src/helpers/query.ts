@@ -26,7 +26,7 @@ export default async function query({
   try {
     if (method == "GET") {
       var response = await fetch(
-        `http://api.nutry-lyfe.pmall.com.ng/api${url}`,
+        `https://nutry.pmall.com.ng//api${url}`,
         {
           headers: conditionalHeader,
           method,
@@ -34,7 +34,7 @@ export default async function query({
       );
     } else {
       var response = await fetch(
-        `http://api.nutry-lyfe.pmall.com.ng/api${url}`,
+        `https://nutry.pmall.com.ng//api${url}`,
         {
           method,
           headers: conditionalHeader,

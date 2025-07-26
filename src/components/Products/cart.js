@@ -72,7 +72,7 @@ const clearCart = () => {
                 <div class="carousel-inner">
                   <div class="carousel-item active">
                     <img class="d-block w-100" src={
-                                    `http://api.nutry-lyfe.pmall.com.ng` +
+                                    `https://nutry.pmall.com.ng/` +
                                     product.image
                                   } alt={product.image}/>
                   </div>
