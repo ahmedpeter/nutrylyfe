@@ -21,14 +21,16 @@ function Sidebar() {
         <SidebarRow icon="fa-clipboard-list" label="Orders" href="/app/orders" />
         <SidebarRow icon="fa-cannabis" label="Products" href="/app/products" />
         <SidebarRow icon="fa-users" label="Networkers" href="/app/networkers" />
+        <SidebarRow icon="fa-address-book" label="Accounts" href="/app/accounts" />
+        <SidebarRow icon="fa-cube" label="Packages" href="/app/packages" />
         <SidebarRow icon="fa-receipt" label="Reports" href="/app/reports" />
-        <SidebarRow icon="fa-user-circle" label="Stockiest" href="/app/stockiest" />
+        <SidebarRow icon="fa-briefcase" label="Stockiest" href="/app/stockiest" />
         <SidebarRow icon="fa-power-off" label="Log Out" onClick={logOutUser} />
       </ul>
    
-   <span className="copyright">
+   {/* <span className="copyright">
      &copy; 2025. All Rights Reserved
-   </span>
+   </span> */}
 </aside>
             
         </div>

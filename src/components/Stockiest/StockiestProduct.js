@@ -135,7 +135,7 @@ const clearCart = () => {
                               <div class="ms-card-img">
                                 <img
                                   src={
-                                    `https://nutry.pmall.com.ng/` +
+                                    `https://nutry.pmall.com.ng` +
                                     product.product.image
                                   }
                                   alt={product.product.name}
@@ -191,7 +191,7 @@ const clearCart = () => {
                 {cartItems.cart.length > 0 && cartItems.cart.map((product)=> (
                   <tr>
                       <i onClick={() => dispatch(removeItem(product.id))} class="fa fa-trash fa-15x"></i>
-                        <td scope="row">{product.name}</td>
+                        <td scope="row text-capitalize">{product.name}</td>
                             <td>{currency(product.price)} </td>
                             <td>
                             <div class="flex g-10 all-center cart-item-count">

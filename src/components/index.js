@@ -11,10 +11,11 @@ import Cart from "./Products/cart";
 import NewProduct from "./Products/NewProduct";
 import NewStockiest from "./Stockiest/NewStockiest";
 import Networkers from "./Networkers";
+import Packages from "./Packages";
+import Accounts from "./Accounts";
 import UserProfile from "./Networkers/UserProfile";
 import AddNetworker from "./Networkers/AddNetworker";
 import Stockiest from "./Stockiest";
-import Packages from "./Packages";
 import Dashboard from "./dashboard";
 import StockiestProducts from "./Stockiest/StockiestProduct";
 
@@ -58,11 +59,12 @@ function Layout() {
           <Route path="/app/product/:prodId/details" element={<ProductDetails />} />
           <Route path="/app/product/stockiest/:stockiestId" element={<StockiestProducts />} />
           <Route path="/app/networkers" element={<Networkers />} />
+          <Route path="/app/packages" element={<Packages />} />
+          <Route path="/app/accounts" element={<Accounts />} />
           <Route path="/app/cart" element={<Cart />} />
           <Route path="/app/user/profile" element={<UserProfile />} />
           <Route path="/app/networker/new" element={<AddNetworker />} />
           <Route path="/app/stockiest" element={<Stockiest />} />
-          <Route path="/app/packages" element={<Packages />} />
           <Route path="/app/products" element={<Products />} />
           <Route path="/app/product/new" element={<NewProduct />} />
           <Route path="/app/stockiest/new" element={<NewStockiest />} />

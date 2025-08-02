@@ -133,11 +133,11 @@ const Header = () => {
           <div className="user__avatar bg-warning">
             <h3>{getInitials(userData)} </h3>
           </div>
-          <h4 className="title-case text-light">
+          <h4 className="text-capitalize text-light">
             {" "}
             {userData?.user.user.fname}  {userData?.user.user.lname} <br />
             <span className="summary__label font-9 role">{userData?.user.user.user_type} ({
-               <ConvertPackage id={userData?.user.user.package_id} type={userData?.user.user.user_type} />
+               <ConvertPackage id={userData?.user.user.package_id}/>
             })</span>
           </h4>
         </div>

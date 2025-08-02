@@ -14,7 +14,7 @@ import { useSelector } from "react-redux";
 import ConvertPackage from "../../helpers/convertPackages";
 import moment from "moment";
 
-const Networkers = () => {
+const Accounts = () => {
   const [loading, setLoading] = useState(false);
   const [alertText, setAlert] = useState("");
   const [addNetworkerModal, setAddNetworkerModal] = useState(false);
@@ -155,13 +155,21 @@ const Networkers = () => {
     console.log(response);
     if (response.success) {
       setLoading(false);
-      console.log(response);
-      // setAllAccounts(response?.data?.data.packages);
+      const allData = response.data.data;
+      // Merge all users into one array
+      const accounts = [
+        ...Object.values(allData.networkers || {}),
+        ...Object.values(allData.stockists || {}),
+        ...Object.values(allData.admins || {})
+      ];
+      setAllAccounts(accounts);
+      console.log(allAccounts);
     } else {
       console.log(response);
       setAlert(response?.data?.message);
       setLoading(false);
     }
+   
   }
   useEffect(() => {
     if(userInfo?.user.user.user_type === "Admin") {
@@ -189,12 +197,12 @@ const Networkers = () => {
                 <div class="d-flex justify-content-between">
                   <div class="ms-header-text">
                     <h6>
-                      All Networkers{" "}
+                      All Account{" "}
                       <span class="badge badge-danger">
-                        {myNetworkList?.length}
+                        {allAccounts?.length}
                       </span>
                     </h6>
-                    <p>See your direct network</p>
+                    <p>See all users in Nutrylyfe irrespective of their account types</p>
                   </div>
                   <ul
                     class="btn-group btn-group-toggle nav nav-tabs ms-graph-metrics"
@@ -209,22 +217,28 @@ const Networkers = () => {
                         onClick={() => setAddNetworkerModal(true)}
                       >
                         {" "}
-                        Add a Networker{" "}
+                        New Account{" "}
                       </a>
                     </li>
                   </ul>
                 </div>
               </div>
               {loading && <Loader/>}
-              { !loading && (
-              <div class="ms-panel-body p-0">
-                <div class="tab-content">
-                  <div
-                    role="tabpanel"
-                    class="tab-pane fade in active show"
-                    id="b-orders"
-                  >
-                    <div class="table-responsive">
+
+
+              <div class="ms-panel ms-email-panel">
+        <div class="ms-panel-body p-0">
+          
+
+          
+          <div class="ms-email-main">
+            {/* <div class="ms-panel-header">
+              <h6>All Account 4</h6>
+              <p>You have 17 Unread Messages</p>
+              
+            </div> */}
+            <div class="ms-email-content">
+            <div class="table-responsive">
                       <table class="table table-hover thead-primary">
                         <thead>
                           <tr>
@@ -232,32 +246,37 @@ const Networkers = () => {
                             <th scope="col">Account Name</th>
                             <th scope="col">Ref ID</th>
                             <th scope="col">Username</th>
+                            <th scope="col"> Type</th>
                             <th scope="col">Package</th>
+                            <th scope="col">State</th>
+                            <th scope="col">Position</th>
                             <th scope="col">Contact</th>
                             <th scope="col">Reg. Date</th>
                             <th scope="col">Action</th>
                           </tr>
                         </thead>
                         <tbody>
-                          {myNetworkList?.map((netlist, i) => (
-                            <tr key={netlist.id}>
+                          {allAccounts?.map((account, i) => (
+                            <tr key={account.id}>
                               <td>{i + 1}</td>
-                              <td>{netlist.name}</td>
-                              <td>{netlist.my_ref_id}</td>
-                              <td>{netlist.username}</td>
-                              <td>
-                                <ConvertPackage
-                                  id={netlist.package_id}/>
+                              <td>{account.name}</td>
+                              <td>{account.my_ref_id}</td>
+                              <td>{account.username}</td>
+                              <td>{account.user_type}</td>
+                              <td> <ConvertPackage id={account.package_id} /></td>
+                              <td>{account.state}</td>
+                              <td>{account.postion}</td>
+                              <td>{account.phone} <br/>
+                              {account.email}
                               </td>
-                              <td>{netlist.phone}</td>
                               <td>
-                                {moment(netlist.created_at).format("lll")}
+                                {moment(account.created_at).format("lll")}
                               </td>
                               <td>
                                 <div
                                   className="pointer"
                                   onClick={() => {
-                                    setSelectedNetworker(netlist);
+                                    setSelectedNetworker(account);
                                     setIsEditMode(true);
                                     setAddNetworkerModal(true);
                                   }}
@@ -270,6 +289,23 @@ const Networkers = () => {
                         </tbody>
                       </table>
                     </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+
+
+              { !loading && (
+              <div class="ms-panel-body p-0">
+                <div class="tab-content">
+                  <div
+                    role="tabpanel"
+                    class="tab-pane fade in active show"
+                    id="b-orders"
+                  >
+                    
                   </div>
                 </div>
               </div>
@@ -731,4 +767,4 @@ const Networkers = () => {
   );
 };
 
-export default Networkers;
+export default Accounts;

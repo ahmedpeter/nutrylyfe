@@ -20,6 +20,9 @@
     right: 0!important;
     z-index: 999;
 }
+.pointer {
+  cursor: pointer;
+}
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;

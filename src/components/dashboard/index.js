@@ -15,6 +15,7 @@ const Dashboard = () => {
   const [productList, setProductList] = useState(null);
   const [availableProducts, setAvailableProducts] = useState(null);
   const [availableOrders, setAvailableOrders] = useState(null);
+  const [networkerOrders, setNetworkerOrders] = useState(null);
   const handleModalClose = () => setUpdateProductModal(false);
   const [userProfile, setUserProfile] = useState("");
   const navigate = useNavigate();
@@ -24,9 +25,11 @@ const Dashboard = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isEditMode, setIsEditMode] = useState(false);
   const [updateProductModal, setUpdateProductModal] = useState(false);
-
+const [allAccounts, setAllAccounts] = useState(null);
   const userInfo = useSelector((state) => state);
 
+
+  const priviledgedUser =  userInfo.user.user.user_type === "Admin" ? "/admin/admin-products" : "/stockist/products/get-system-products";
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -73,7 +76,7 @@ const Dashboard = () => {
       token: userInfo?.user?.user.token,
     });
     console.log(response);
-    getAllOrders()
+    // getStockiestOrders()
     if (response.success) {
       setLoading(false);
       console.log(response);
@@ -133,7 +136,7 @@ const Dashboard = () => {
       setLoading(false);
     }
   };
-  const getAllOrders = async () => {
+  const getStockiestOrders = async () => {
     setLoading(true);
     if (!userInfo.user.user.token) {
       navigate("/");
@@ -141,7 +144,6 @@ const Dashboard = () => {
     // console.log(userType);
     const response = await query({
       method: "GET",
-      // url: "/stockist/products/get-system-products",
       url: "/stockist/orders/all",
       token: userInfo?.user?.user.token,
     });
@@ -158,11 +160,83 @@ const Dashboard = () => {
     }
   };
 
+  // Admin Function to get all system users
+  const getAllUsers = async () => {
+    setLoading(true);
+    if (!userInfo.user.user.token) {
+      navigate("/");
+    }
+    const response = await query({
+      method: "GET",
+      url: "/admin/users/all",
+      token: userInfo?.user?.user.token,
+    });
+    console.log(response);
+    if (response.success) {
+      setLoading(false);
+      setAllAccounts(response.data.data);
+      console.log(allAccounts);
+    } else {
+      console.log(response);
+      setAlert(response?.data?.message);
+      setLoading(false);
+    }
+   
+  }
+  const getNetworkerOrders = async () => {
+    setLoading(true);
+    if (!userInfo.user.user.token) {
+      navigate("/");
+    }
+    // console.log(userType);
+    const response = await query({
+      method: "GET",
+      url: "/networker/orders/all",
+      token: userInfo?.user?.user.token,
+    });
+    console.log(response);
+    if (response.success) {
+      setLoading(false);
+      console.log(response);
+      setNetworkerOrders(response?.data?.data);
+    } else {
+      console.log(response);
+      setAlert(response?.data?.message);
+      setTimeout(() => setAlert(""), 5000);
+      setLoading(false);
+    }
+  };
+
+  const handleRequeryStatus = async (orderId) => {
+    setLoading(true);
+    console.log(orderId)
+
+    const response = await query({
+      method: "POST",
+      url: "/payment/orders/verify-payment",
+      bodyData: {reference: orderId},
+      token: userInfo?.user?.user.token,
+    });
+    console.log(response);
+    if (response.success) {
+      setLoading(false);
+      console.log(response);
+      
+    } else {
+      console.log(response);
+      setAlert(response?.data?.message);
+      setTimeout(() => setAlert(""), 5000);
+      setLoading(false);
+    }
+  }
 
   const handleStockiestClick = (id) => {
     navigate(`/app/product/stockiest/${id}`);
   };
 
+  const handleAddNewNetworker = () => {
+    navigate("/app/networkers");
+  }
 
   const groupedByUser = useMemo(() => {
     if (!availableOrders || !Array.isArray(availableOrders)) return [];
@@ -200,6 +274,10 @@ const Dashboard = () => {
     if (userInfo?.user?.user.user_type === "Stockist") {
       getAllProducts();
       getAvailableProducts();
+      getStockiestOrders();
+    }
+    if (userInfo?.user?.user.user_type === "Networker") {
+      getNetworkerOrders();
     }
   }, []);
 
@@ -208,10 +286,10 @@ const Dashboard = () => {
     if (!userInfo.user.user.token) {
       navigate("/");
     }
-    // console.log(userType);
+    console.log(priviledgedUser);
     const response = await query({
       method: "GET",
-      url: "/stockist/products/get-system-products",
+      url: priviledgedUser,
       token: userInfo?.user?.user.token,
     });
     console.log(response);
@@ -230,9 +308,11 @@ const Dashboard = () => {
   useEffect(() => {
     console.log(userInfo);
     getUserProfile();
-    if (userInfo?.user?.user.user_type === "Stockist") {
-      getAllProducts();
+    if (userInfo?.user?.user.user_type === "Admin") {
+      getAllUsers();
     }
+      getAllProducts();
+    // }
   }, []);
 
   return (
@@ -280,7 +360,7 @@ const Dashboard = () => {
                       </section>
                     </div>
                   </div>
-                  <i class="fab fa-facebook"></i>
+                  <i class="material-icons">ac_unit</i>
                 </div>
               </div>
               <div class="col-xl-4 col-md-6">
@@ -296,7 +376,8 @@ const Dashboard = () => {
                       <p class="fs-9 mt-7">See more</p>
                     </div>
                   </div>
-                  <i class="fab fa-twitter-square"></i>
+                  <i class="material-icons">beach_access</i>
+                  {/*<i class="material-icons">ac_unit</i> */}
                 </div>
               </div>
               <div class="col-xl-4 col-md-6">
@@ -312,7 +393,7 @@ const Dashboard = () => {
                       <p class="fs-9 mt-7">See more</p>
                     </div>
                   </div>
-                  <i class="fab fa-twitter-square"></i>
+                  <i class="material-icons">bubble_chart</i>
                 </div>
               </div>
             </div>
@@ -335,12 +416,13 @@ const Dashboard = () => {
                       <p class="ms-card-change">
                         {" "}
                         <i class="material-icons">arrow_upward</i>{" "}
-                        {userProfile?.referrals?.length}
+                        {groupedByUser?.length}
                       </p>
                       <p class="fs-9 mt-7">See all</p>
                     </div>
                   </div>
-                  <i class="fab fa-facebook"></i>
+                  <i class="material-icons">beach_access</i>
+                  {/* <i class="material-icons">ac_unit</i> */}
                 </div>
               </div>
               <div class="col-xl-4 col-md-6">
@@ -356,7 +438,7 @@ const Dashboard = () => {
                       <p class="fs-9 mt-7">See more</p>
                     </div>
                   </div>
-                  <i class="fab fa-twitter-square"></i>
+                 <i class="material-icons">ac_unit</i>
                 </div>
               </div>
               <div class="col-xl-4 col-md-6">
@@ -372,7 +454,66 @@ const Dashboard = () => {
                       <p class="fs-9 mt-7">See more</p>
                     </div>
                   </div>
-                  <i class="fab fa-twitter-square"></i>
+                 <i class="material-icons">ac_unit</i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+
+{userInfo?.user.user.user_type === "Admin" && (
+        <>
+          <div class="ms-panel-body pb-0">
+            <div class="row">
+              <div class="col-xl-4 col-md-6">
+                <div class="ms-card card-facebook ms-widget ms-infographics-widget">
+                  <div class="ms-card-body media">
+                    <div class="media-body">
+                      <h6>All Stockiest</h6>
+
+                      <p class="ms-card-change">
+                        {" "}
+                        <i class="material-icons">arrow_upward</i>{" "}
+                        {stockiestList?.length}
+                      </p>
+                      <p class="fs-9 mt-7">See all</p>
+                    </div>
+                  </div>
+                  <i class="material-icons">beach_access</i>
+                  {/* <i class="material-icons">ac_unit</i> */}
+                </div>
+              </div>
+              <div class="col-xl-4 col-md-6">
+                <div class="ms-card card-linkedin ms-widget ms-infographics-widget">
+                  <div class="ms-card-body media">
+                    <div class="media-body">
+                      <h6>All Networkers</h6>
+                      <p className="ms-card-change">
+                          <i className="material-icons">arrow_upward</i>{" "}
+                          {allAccounts?.networkers ? Object.keys(allAccounts.networkers).length : 0}
+                        </p>
+
+                      <p class="fs-9 mt-7">See more</p>
+                    </div>
+                  </div>
+                 <i class="material-icons">ac_unit</i>
+                </div>
+              </div>
+              <div class="col-xl-4 col-md-6">
+                <div class="ms-card card-twitter ms-widget ms-infographics-widget">
+                  <div class="ms-card-body media">
+                    <div class="media-body">
+                      <h6>Available Products</h6>
+                      <p class="ms-card-change">
+                        {" "}
+                        <i class="material-icons">arrow_upward</i>{" "}
+                        {productList?.length}
+                      </p>
+                      <p class="fs-9 mt-7">See more</p>
+                    </div>
+                  </div>
+                  <i class="material-icons">bubble_chart</i>
                 </div>
               </div>
             </div>
@@ -400,6 +541,7 @@ const Dashboard = () => {
                           role="tab"
                           data-toggle="tab"
                           aria-selected="true"
+                          onClick={()=> handleAddNewNetworker()}
                         >
                           Add Networker
                         </a>
@@ -432,6 +574,8 @@ const Dashboard = () => {
                               <th scope="col">Ref ID</th>
                               <th scope="col">Username</th>
                               <th scope="col">Package</th>
+                              <th scope="col">Position</th>
+                              <th scope="col">State</th>
                               <th scope="col">Contact</th>
                               <th scope="col">Reg. Date</th>
                             </tr>
@@ -442,8 +586,11 @@ const Dashboard = () => {
                                 <td>{refer.name}</td>
                                 <td>{refer.my_ref_id}</td>
                                 <td>{refer.username}</td>
-                                <td>{refer.package_id}</td>
-                                <td>{refer.phone}</td>
+                                <td><ConvertPackage id={refer.package_id} /></td>
+                                <td>{refer.position !== null ? refer.position : "N/A"} </td>
+                                <td>{refer.state} </td>
+                                <td>{refer.phone} <br/>
+                                {refer.email}</td>
                                 <td>
                                   {moment(refer.created_at).format("lll")}
                                 </td>
@@ -494,7 +641,7 @@ const Dashboard = () => {
                               {availableProducts?.map((product, i) => (
                                 <tr key={product.id}>
                                   <td>{i + 1}</td>
-                                  <td>{product?.product?.name}</td>
+                                  <td className="text-capitalize">{product?.product?.name}</td>
                                   <td>{currency(product?.product?.price)}</td>
                                   <td>{product.pv}</td>
                                   <td>{product.quantity}</td>
@@ -521,7 +668,7 @@ const Dashboard = () => {
               </div>
             )}
 
-          {userInfo?.user.user.user_type === "Stockist" && (
+          {(userInfo?.user.user.user_type === "Stockist" || userInfo?.user.user.user_type === "Admin") && (
             <div class="col-xl-12 col-md-12">
               <div class="ms-panel ms-panel-fh ms-crypto-orders">
                 <div class="ms-panel-header">
@@ -546,17 +693,18 @@ const Dashboard = () => {
                               <th scope="col">S/N</th>
                               <th scope="col">Product Name</th>
                               <th scope="col">Product Cost</th>
-                              <th scope="col">Product PV</th>
+                              {userInfo?.user.user.user_type === "Stockist" && ( 
                               <th scope="col">Action</th>
+                              )}
                             </tr>
                           </thead>
                           <tbody>
                             {productList?.map((product, i) => (
                               <tr key={product.id}>
                                 <td>{i + 1}</td>
-                                <td>{product.name}</td>
+                                <td className="text-capitalize">{product.name}</td>
                                 <td>{currency(product.price)}</td>
-                                <td>{product.pv}</td>
+                                {userInfo?.user.user.user_type === "Stockist" && ( 
                                 <td>
                                   <div
                                     className="pointer"
@@ -570,6 +718,7 @@ const Dashboard = () => {
                                     Update Stock
                                   </div>
                                 </td>
+                                )}
                               </tr>
                             ))}
                           </tbody>
@@ -593,15 +742,13 @@ const Dashboard = () => {
               </div>
               <div class="ms-panel-body p-0">
                 <div class="table-responsive">
+                  {userInfo.user.user.user_type === "Stockist" && (
                   <table class="table table-hover thead-primary ">
                     <thead>
                       <tr>
                         <th scope="col">Order Date</th>
                         <th scope="col">Networker</th>
-                        <th scope="col">User ID</th>
-                        <th scope="col">Amount</th>
-                        <th scope="col">Category</th>
-                        <th scope="col">Orders</th>
+                        <th scope="col">Order Details</th>
                         <th scope="col">Status</th>
                       </tr>
                     </thead>
@@ -609,71 +756,71 @@ const Dashboard = () => {
                     {groupedByUser.map((group) => (
                       <tr>
                         <td>{moment(group.created_at).format("lll")}</td>
-                        <td>{group.user.name}</td>
-                        <td>{group.user.my_ref_id}</td>
-                        <td>$900.50</td>
-                        <td> Oil </td>
+                        <td className="text-capitalize">{group.user.name}</td>
+                        <td>
+                          <ol>
+                          {group.orders.map((order)=> (
+                            <li className="pointer"> {order.orderID}</li>
+                            ))}
+                          </ol>
 
-                        <td>$5.85</td>
+                        </td>
                         <td>
                           <span class="badge badge-success">Completed</span>
                         </td>
                       </tr>
                       ))}
-                      <tr>
-                        <td>11.01.2020</td>
-                        <td>Gummy Bears</td>
-                        <td>#TR371893</td>
-                        <td>$335.50</td>
-                        <td> Edibles </td>
-
-                        <td>$5.85</td>
-                        <td>
-                          <span class="badge badge-danger">Pending</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>10.01.2020</td>
-                        <td>Mango Kush</td>
-                        <td>#TR137381</td>
-                        <td>$378.50</td>
-                        <td> Plants </td>
-
-                        <td>$5.85</td>
-                        <td>
-                          <span class="badge badge-danger">Pending</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>09.01.2020</td>
-                        <td>Purple Haze</td>
-                        <td>#TR371893</td>
-                        <td>$219.30</td>
-                        <td> FLowers</td>
-
-                        <td>$5.85</td>
-                        <td>
-                          <span class="badge badge-success">Completed</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>08.01.2020</td>
-                        <td>UK Cheese</td>
-                        <td>#TR137381</td>
-                        <td>$438.50</td>
-                        <td>Leafs</td>
-
-                        <td>$5.85</td>
-                        <td>
-                          <span class="badge badge-danger">Pending</span>
-                        </td>
-                      </tr>
                     </tbody>
                   </table>
+                  )}
+
+                {userInfo?.user.user.user_type === "Networker" && (
+                  <table class="table table-hover thead-primary ">
+                    <thead>
+                      <tr>
+                        <th scope="col">Order Date</th>
+                        <th scope="col">Order ID</th>
+                        <th scope="col">Products</th>
+                        <th scope="col">Total</th>
+                        <th scope="col">Clearing Status</th>
+                        <th scope="col">Payment Status</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    {networkerOrders?.map((order) => (
+                      <tr>
+                        <td>{moment(order.created_at).format("lll")}</td>
+                        <td>{order.orderID}</td>
+                        <td>
+                          <ul>
+                          {order.items?.map((single) => (
+                              <li> {single.product.name} <br/> <strong>Price:</strong> {currency(single.product.price)} * {single.qty}pcs
+                               </li>
+                          ))}
+                          </ul>
+                        </td>
+                        <td> {currency(order.total)} </td>
+                        <td>
+                          <span class="badge badge-danger">Pending</span>
+                        </td>
+                        <td>
+                          <span class="badge badge-danger text-capitalize">{order.payment.status}</span>
+                        </td>
+                        <td>
+                          <span title="Confirm Order Status" className="pointer" onClick={() => handleRequeryStatus(order.orderID)}><i class="material-icons">cached</i></span>
+                        </td>
+                      </tr>
+                    ))}
+                     
+                    </tbody>
+                  </table>
+                  )}
                 </div>
               </div>
             </div>
           </div>
+          {userInfo?.user.user.user_type === "Networker" && (
           <div class="col-xl-4 col-md-12">
             <div class="ms-panel ms-panel-fh">
               <div class="ms-panel-header spbtw">
@@ -691,7 +838,7 @@ const Dashboard = () => {
                   {pair.map((item, i) => (
                     <div className="ms-social-grid pointer" key={i} onClick={() => handleStockiestClick(item.id)}>
                       <i className="fas fa-shopping-cart bg-linkedin"></i>
-                      <p className="ms-text-dark">{item.name}</p>
+                      <p className="ms-text-dark text-capitalize">{item.name}</p>
                       <span>{item.state} ({item.lga})</span>
                     </div>
                   ))}
@@ -702,6 +849,7 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
+          )}
         </div>
       </div>
 

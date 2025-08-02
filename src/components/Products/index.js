@@ -183,7 +183,7 @@ const Products = () => {
                               <div class="ms-card-img">
                                 <img
                                   src={
-                                    `https://nutry.pmall.com.ng/` +
+                                    `https://nutry.pmall.com.ng` +
                                     product.image
                                   }
                                   alt={product.name}
