@@ -75,7 +75,7 @@ const Accounts = () => {
       name: selectedNetworker?.name || "",
       email: selectedNetworker?.email || "",
       phone: selectedNetworker?.phone || "",
-      binaryPosition: selectedNetworker?.binaryPosition || "",
+      position: selectedNetworker?.position || "",
       username: selectedNetworker?.username || "",
       address: selectedNetworker?.address || "",
       package_id: selectedNetworker?.package_id || "",
@@ -86,12 +86,13 @@ const Accounts = () => {
       acct_number: selectedNetworker?.acct_number || "",
       bank: selectedNetworker?.bank || "",
       acct_type: selectedNetworker?.acct_type || "",
+      user_id: selectedNetworker?.id || ""
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Full name is required"),
       username: Yup.string().required("Username is required"),
       ref_id: Yup.string().required("Placement ID is required"),
-      binaryPosition: Yup.string().required("Binary position is required"),
+      position: Yup.string().required("Binary position is required"),
       package_id: Yup.string().required("Package type is required"),
       email: Yup.string().email("Invalid email").required("Email is required"),
       phone: Yup.string().required("Phone is required"),
@@ -265,7 +266,7 @@ const Accounts = () => {
                               <td>{account.user_type}</td>
                               <td> <ConvertPackage id={account.package_id} /></td>
                               <td>{account.state}</td>
-                              <td>{account.postion}</td>
+                              <td>{account.position}</td>
                               <td>{account.phone} <br/>
                               {account.email}
                               </td>
@@ -491,13 +492,13 @@ const Accounts = () => {
 
                   {/* Binary Position */}
                   <div className="col-xl-3 col-md-12">
-                    <label htmlFor="binaryPosition">Binary Position</label>
+                    <label htmlFor="position">Binary Position</label>
                     <div className="input-group">
                       <select
                         className="form-control"
-                        id="binaryPosition"
-                        name="binaryPosition"
-                        value={formik.values.binaryPosition}
+                        id="position"
+                        name="position"
+                        value={formik.values.position}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         required
@@ -507,10 +508,10 @@ const Accounts = () => {
                         <option value="right">Right</option>
                       </select>
                     </div>
-                    {formik.touched.binaryPosition &&
-                      formik.errors.binaryPosition && (
+                    {formik.touched.position &&
+                      formik.errors.position && (
                         <div className="text-danger">
-                          {formik.errors.binaryPosition}
+                          {formik.errors.position}
                         </div>
                       )}
                   </div>
@@ -615,7 +616,7 @@ const Accounts = () => {
                       {/* Binary Position */}
 
                       <div className="col-xl-3 col-md-12">
-                        <label htmlFor="binaryPosition">
+                        <label htmlFor="position">
                           Local Government Area
                         </label>
                         <div className="input-group">
@@ -638,7 +639,7 @@ const Accounts = () => {
                         </div>
                       </div>
                       <div className="col-xl-3 col-md-12">
-                        <label htmlFor="binaryPosition">
+                        <label htmlFor="position">
                           Bank Account Type
                         </label>
                         <div className="input-group">

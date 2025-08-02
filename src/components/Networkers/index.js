@@ -23,6 +23,7 @@ const Networkers = () => {
   const [selectedState, setSelectedState] = useState("");
   const [selectedBank, setSelectedBank] = useState("");
   const [lgas, setLgas] = useState([]);
+  const [expandedRow, setExpandedRow] = useState(null);
   const [myNetworkList, setMyNetworkList] = useState([]);
   const handleModalClose = () => setAddNetworkerModal(false);
   const [packageList, setPackageList] = useState([]);
@@ -37,6 +38,10 @@ const Networkers = () => {
     formik.setFieldValue("lga", ""); // Clear LGA
     const found = statesAndLgas.find((s) => s.state === stateName);
     setLgas(found ? found.lgas : []);
+  };
+
+  const toggleRow = (id) => {
+    setExpandedRow(expandedRow === id ? null : id);
   };
 
   const handleBankChange = (e) => {
@@ -75,7 +80,7 @@ const Networkers = () => {
       name: selectedNetworker?.name || "",
       email: selectedNetworker?.email || "",
       phone: selectedNetworker?.phone || "",
-      binaryPosition: selectedNetworker?.binaryPosition || "",
+      position: selectedNetworker?.position || "",
       username: selectedNetworker?.username || "",
       address: selectedNetworker?.address || "",
       package_id: selectedNetworker?.package_id || "",
@@ -86,12 +91,13 @@ const Networkers = () => {
       acct_number: selectedNetworker?.acct_number || "",
       bank: selectedNetworker?.bank || "",
       acct_type: selectedNetworker?.acct_type || "",
+      user_id: selectedNetworker?.id || "",
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Full name is required"),
       username: Yup.string().required("Username is required"),
       ref_id: Yup.string().required("Placement ID is required"),
-      binaryPosition: Yup.string().required("Binary position is required"),
+      position: Yup.string().required("Binary position is required"),
       package_id: Yup.string().required("Package type is required"),
       email: Yup.string().email("Invalid email").required("Email is required"),
       phone: Yup.string().required("Phone is required"),
@@ -231,6 +237,8 @@ const Networkers = () => {
                             <th scope="col">S/N</th>
                             <th scope="col">Account Name</th>
                             <th scope="col">Ref ID</th>
+                            <th scope="col">Position</th>
+                            <th scope="col">Downlines</th>
                             <th scope="col">Username</th>
                             <th scope="col">Package</th>
                             <th scope="col">Contact</th>
@@ -240,16 +248,21 @@ const Networkers = () => {
                         </thead>
                         <tbody>
                           {myNetworkList?.map((netlist, i) => (
+                            <>
                             <tr key={netlist.id}>
                               <td>{i + 1}</td>
-                              <td>{netlist.name}</td>
+                              <td className="text-capitalize">{netlist.name}</td>
                               <td>{netlist.my_ref_id}</td>
+                              <td className="text-capitalize">{netlist.position}</td>
+                              <td className="text-capitalize" title="Click to See" onClick={() => toggleRow(netlist.id)}>
+                                  {expandedRow === netlist.id ? "Hide Details" : `${netlist.all_downline?.length} downlines`}
+                              </td>
                               <td>{netlist.username}</td>
                               <td>
                                 <ConvertPackage
                                   id={netlist.package_id}/>
                               </td>
-                              <td>{netlist.phone}</td>
+                              <td>{netlist.phone} <br/> {netlist.email}</td>
                               <td>
                                 {moment(netlist.created_at).format("lll")}
                               </td>
@@ -266,6 +279,42 @@ const Networkers = () => {
                                 </div>
                               </td>
                             </tr>
+
+
+                            {expandedRow === netlist.id &&
+                                netlist.all_downline?.map((net, idx) => (
+                              <tr key={net.id}>
+                              <td>({String.fromCharCode(97 + idx)})</td>
+                              <td className="text-capitalize">{net.name}</td>
+                              <td>{net.my_ref_id}</td>
+                              <td className="text-capitalize">{net.position}</td>
+                              <td className="text-capitalize" title="Click to See" onClick={() => toggleRow(net.id)}>
+                                  {expandedRow === net.id ? "Hide Details" : `${net.all_downline?.length} downlines`}
+                              </td>
+                              <td>{net.username}</td>
+                              <td>
+                                <ConvertPackage
+                                  id={net.package_id}/>
+                              </td>
+                              <td>{net.phone} <br/> {net.email}</td>
+                              <td>
+                                {moment(net.created_at).format("lll")}
+                              </td>
+                              <td>
+                                <div
+                                  className="pointer"
+                                  onClick={() => {
+                                    setSelectedNetworker(net);
+                                    setIsEditMode(true);
+                                    setAddNetworkerModal(true);
+                                  }}
+                                >
+                                  <i class="fas fa-pencil-alt"></i>
+                                </div>
+                              </td>
+                            </tr>
+                            ))}
+                    </>
                           ))}
                         </tbody>
                       </table>
@@ -455,13 +504,13 @@ const Networkers = () => {
 
                   {/* Binary Position */}
                   <div className="col-xl-3 col-md-12">
-                    <label htmlFor="binaryPosition">Binary Position</label>
+                    <label htmlFor="position">Binary Position</label>
                     <div className="input-group">
                       <select
                         className="form-control"
-                        id="binaryPosition"
-                        name="binaryPosition"
-                        value={formik.values.binaryPosition}
+                        id="position"
+                        name="position"
+                        value={formik.values.position}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         required
@@ -471,10 +520,10 @@ const Networkers = () => {
                         <option value="right">Right</option>
                       </select>
                     </div>
-                    {formik.touched.binaryPosition &&
-                      formik.errors.binaryPosition && (
+                    {formik.touched.position &&
+                      formik.errors.position && (
                         <div className="text-danger">
-                          {formik.errors.binaryPosition}
+                          {formik.errors.position}
                         </div>
                       )}
                   </div>
@@ -579,7 +628,7 @@ const Networkers = () => {
                       {/* Binary Position */}
 
                       <div className="col-xl-3 col-md-12">
-                        <label htmlFor="binaryPosition">
+                        <label htmlFor="position">
                           Local Government Area
                         </label>
                         <div className="input-group">
@@ -602,7 +651,7 @@ const Networkers = () => {
                         </div>
                       </div>
                       <div className="col-xl-3 col-md-12">
-                        <label htmlFor="binaryPosition">
+                        <label htmlFor="position">
                           Bank Account Type
                         </label>
                         <div className="input-group">
