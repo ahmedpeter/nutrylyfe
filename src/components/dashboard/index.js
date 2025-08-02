@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import moment from "moment";
 import * as Yup from "yup";
+import { copyToClipboard } from "../../utils/copyTextToClipBoard";
 import Modal from "@mui/material/Modal";
 import { useFormik } from "formik";
 import query from "../../helpers/query.ts";
@@ -15,6 +16,7 @@ const Dashboard = () => {
   const [productList, setProductList] = useState(null);
   const [availableProducts, setAvailableProducts] = useState(null);
   const [availableOrders, setAvailableOrders] = useState(null);
+  const [allDownlines, setAllDownlines] = useState(null);
   const [networkerOrders, setNetworkerOrders] = useState(null);
   const handleModalClose = () => setUpdateProductModal(false);
   const [userProfile, setUserProfile] = useState("");
@@ -65,6 +67,59 @@ const [allAccounts, setAllAccounts] = useState(null);
     },
   });
 
+  const handleCopy = () => {
+    console.log(userInfo?.user.user.my_ref_id)
+		copyToClipboard(`${userInfo?.user.user.my_ref_id}`, (message) => {
+      setAlert(message );
+			setTimeout(() => setAlert(null), 5000);
+		});
+	};
+
+  const countGrandchildrenAndBeyond = (parent) => {
+    let count = 0;
+  
+    const countRecursive = (list, level = 1) => {
+      if (!Array.isArray(list)) return;
+  
+      for (const person of list) {
+        // Only count those at level 2 or deeper (grandchildren and beyond)
+        if (level >= 2) count++;
+  
+        if (person.all_downline && person.all_downline.length > 0) {
+          countRecursive(person.all_downline, level + 1);
+        }
+      }
+    };
+  
+    countRecursive(parent.allDownline, 1); // Start at level 1 (children)
+    return count;
+  };
+  
+  
+
+
+const getAllMyDownlines =  async () => {
+  if (!userInfo.user.user.token) {
+    navigate("/");
+  }
+  const response = await query({
+    method: "GET",
+    url: "/profile/hierarchy-all-downline",
+    token: userInfo?.user?.user.token,
+  });
+  console.log(response);
+  // getStockiestOrders()
+  if (response.success) {
+    setLoading(false);
+    setAllDownlines(response?.data.data);
+    console.log(response);
+  } else {
+    console.log(response);
+    setAlert(response?.data?.message);
+    setLoading(false);
+  }
+}
+
   const getUserProfile = async () => {
     setLoading(true);
     if (!userInfo.user.user.token) {
@@ -80,6 +135,7 @@ const [allAccounts, setAllAccounts] = useState(null);
     if (response.success) {
       setLoading(false);
       console.log(response);
+      getAllMyDownlines();
       getAllStockiest();
       setUserProfile(response?.data.data.user);
     } else {
@@ -320,12 +376,13 @@ const [allAccounts, setAllAccounts] = useState(null);
       <div class="col-md-12">
         <div class="ms-panel">
           <div class="ms-panel-header">
+          {alertText && <div className="alert alert-info mt-md">{alertText}</div>}
             <div class="d-flex justify-content-between">
               <div class="ms-header-text">
                 <h6>Recent Activities</h6>
                 <p>
                   Quick Overview on your Nutrylyfe Account{" "}
-                  <span class="badge badge-success">
+                  <span class="badge badge-success pointer" onClick={handleCopy}>
                     {userInfo?.user.user.my_ref_id}
                   </span>{" "}
                 </p>
@@ -353,7 +410,7 @@ const [allAccounts, setAllAccounts] = useState(null);
                         <div>
                           <p class="ms-card-change">
                             {" "}
-                            <i class="material-icons">arrow_upward</i> 9,289
+                            <i class="material-icons">arrow_upward</i> {countGrandchildrenAndBeyond(allDownlines)}
                           </p>
                           <p class="fs-9 mt-7">Indirect Referral</p>
                         </div>
