@@ -85,7 +85,7 @@ const clearCart = () => {
   useEffect(() => {
       console.log(cartItems);
     getAllProducts();
-  }, [cartItems]);
+  }, []);
 
   return (
     <section>
@@ -129,31 +129,31 @@ const clearCart = () => {
                   >
                     <div class="ms-panel-body">
                       <div class="row">
-                        {productList?.map((product, i) => (
+                        {productList?.filter(product => product.product !== null).map((product) => (
                           <div class="col-lg-4 col-md-6 col-sm-6">
                             <div class="ms-card">
                               <div class="ms-card-img">
                                 <img
                                   src={
                                     `https://nutry.pmall.com.ng` +
-                                    product.product.image
+                                    product.product?.image
                                   }
-                                  alt={product.product.name}
+                                  alt={product.product?.name}
                                 />
                               </div>
                               <div class="ms-card-body">
                                 <div class="ms-panel-custom">
-                                  <h4>{product.product.name}</h4>
+                                  <h4>{product.product?.name}</h4>
                                 </div>
                                     <table class="table ms-profile-information">
                 <tbody>
                   <tr>
                     <th scope="row"> Ingredients</th>
-                    <td>{ product.product.ingredients}</td>
+                    <td>{ product.product?.ingredients}</td>
                   </tr>
                   <tr>
                     <th scope="row"> Benefits</th>
-                    <td>{product.product.benefits}</td>
+                    <td>{product.product?.benefits}</td>
                   </tr>
                   <tr>
                     <th scope="row">Price</th>
@@ -168,7 +168,7 @@ const clearCart = () => {
 
                 </tbody>
               </table>
-              <button onClick={() => handleAddToCart(product.product)} class="btn btn-primary mr-3  ms-graph-metrics">Add To Cart</button>
+              <button onClick={() => handleAddToCart(product?.product)} class="btn btn-primary mr-3  ms-graph-metrics">Add To Cart</button>
 
                                
                               </div>

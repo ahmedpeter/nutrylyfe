@@ -96,7 +96,6 @@ const Login = () => {
     validationSchema,
   });
 
-
   const forgotPasswordFormik = useFormik({
     initialValues: {
       email: "",

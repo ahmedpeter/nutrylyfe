@@ -3344,6 +3344,9 @@ input:checked+.ms-switch-slider.ms-switch-dark {
     width: 25px;
     margin: 0 5px;
 }
+.text-capitalize{
+text-transform: capitalize;
+}
 .floating__table {
   width: 40%;
     position: absolute;

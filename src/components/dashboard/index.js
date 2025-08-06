@@ -14,6 +14,7 @@ import ConvertPackage from "../../helpers/convertPackages";
 
 const Dashboard = () => {
   const [productList, setProductList] = useState(null);
+  const [stockiestProductList, setStockiestProductList] = useState(null);
   const [availableProducts, setAvailableProducts] = useState(null);
   const [availableOrders, setAvailableOrders] = useState(null);
   const [allDownlines, setAllDownlines] = useState(null);
@@ -161,6 +162,9 @@ const getAllMyDownlines =  async () => {
     if (response.success) {
       setLoading(false);
       console.log(response);
+      // getAllProductsFromStockiest(12)
+      // getAllProductsFromStockiest(8)
+      getAllProductsFromStockiest(3)
       setStockiestList(response?.data?.data.data);
     } else {
       console.log(response);
@@ -168,6 +172,50 @@ const getAllMyDownlines =  async () => {
       setLoading(false);
     }
   };
+
+  const getStockiestProductById = async (prodId) => {
+    const response = await query({
+      method: "GET",
+      url: `/networker/stockist/get-single-stockist-product/${prodId}`,
+      token: userInfo?.user?.user.token,
+    });
+    console.log(response);
+    if (response.success) {
+      setLoading(false);
+      console.log(response);
+      // setStockiestProductList(response?.data?.data.data);
+    } else {
+      console.log(response);
+      setAlert(response?.data?.message);
+      setLoading(false);
+    }
+  }
+  const getAllProductsFromStockiest = async (stockiestId) => {
+    setLoading(true);
+    const response = await query({
+      method: "GET",
+      url: `/networker/stockist/get-all-products-by-stockist/${stockiestId}`,
+      token: userInfo?.user?.user.token,
+    });
+    console.log(response);
+    if (response.success) {
+      setLoading(false);
+      console.log(response.data.data);
+      if(response.data.data.length > 0) {
+        response.data.data.map((product)=> {
+          getStockiestProductById(product.product_id)
+        })
+        
+      }
+      
+      // setStockiestProductList(response?.data?.data.data);
+    } else {
+      console.log(response);
+      setAlert(response?.data?.message);
+      setLoading(false);
+    }
+  };
+
   const getAvailableProducts = async () => {
     setLoading(true);
     if (!userInfo.user.user.token) {
@@ -184,7 +232,9 @@ const getAllMyDownlines =  async () => {
     if (response.success) {
       setLoading(false);
       console.log(response);
-      setAvailableProducts(response?.data?.data);
+      const updatedStoreItems = response.data.data.filter(product => product.product);
+      console.log(updatedStoreItems);
+      setAvailableProducts(updatedStoreItems);
     } else {
       console.log(response);
       setAlert(response?.data?.message);
@@ -806,7 +856,6 @@ const getAllMyDownlines =  async () => {
                         <th scope="col">Order Date</th>
                         <th scope="col">Networker</th>
                         <th scope="col">Order Details</th>
-                        <th scope="col">Status</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -815,16 +864,23 @@ const getAllMyDownlines =  async () => {
                         <td>{moment(group.created_at).format("lll")}</td>
                         <td className="text-capitalize">{group.user.name}</td>
                         <td>
-                          <ol>
-                          {group.orders.map((order)=> (
-                            <li className="pointer"> {order.orderID}</li>
-                            ))}
-                          </ol>
+                        <ol>
+        {group.orders.map((order) => (
+          <li key={order.orderID} className="pointer d-flex justify-content-between align-items-center">
+            <span>{order.orderID}</span>
+            <span className={`text-capitalize badge ${
+              order.status === 'completed' ? 'badge-success' :
+              order.status === 'pending' ? 'badge-warning' :
+              order.status === 'closed' ? 'badge-danger' : 'badge-secondary'
+            }`}>
+              {order.status}
+            </span>
+          </li>
+        ))}
+      </ol>
 
                         </td>
-                        <td>
-                          <span class="badge badge-success">Completed</span>
-                        </td>
+                        
                       </tr>
                       ))}
                     </tbody>
@@ -897,6 +953,7 @@ const getAllMyDownlines =  async () => {
                       <i className="fas fa-shopping-cart bg-linkedin"></i>
                       <p className="ms-text-dark text-capitalize">{item.name}</p>
                       <span>{item.state} ({item.lga})</span>
+                      {/* <span>Products: {getAllProductsFromStockiest(item.id)}</span> */}
                     </div>
                   ))}
                 </div>

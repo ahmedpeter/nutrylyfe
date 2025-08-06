@@ -17,7 +17,7 @@ import Application from './components';
 function App(){
   return (
       <div className="layout">
-        <Application />
+          <Application />
       </div>
   );
 }
