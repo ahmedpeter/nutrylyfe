@@ -913,9 +913,10 @@ const getAllMyDownlines =  async () => {
       <Modal
         open={updateProductModal}
         onClose={handleModalClose}
-        onRequestClose={handleModalClose}
-        shouldCloseOnOverlayClick={false} 
-        ariaHideApp={false}
+        onClose={(event, reason) => {
+          if (reason === 'backdropClick') return;
+          handleModalClose();
+        }}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-address"
       >

@@ -201,6 +201,10 @@ const Login = () => {
       <Modal
         open={forgotPasswordModal}
         onClose={handleModalClose}
+        onClose={(event, reason) => {
+          if (reason === 'backdropClick') return;
+          handleModalClose();
+        }}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description">
         <div className="modal-dialog modal-dialog-centered modal-min" role="document">
