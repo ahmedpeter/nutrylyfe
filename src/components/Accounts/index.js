@@ -260,7 +260,7 @@ const Accounts = () => {
                           {allAccounts?.map((account, i) => (
                             <tr key={account.id}>
                               <td>{i + 1}</td>
-                              <td>{account.name}</td>
+                              <td className="text-capitalize">{account.name}</td>
                               <td>{account.my_ref_id}</td>
                               <td>{account.username}</td>
                               <td>{account.user_type}</td>

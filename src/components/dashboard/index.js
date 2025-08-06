@@ -85,13 +85,13 @@ const [allAccounts, setAllAccounts] = useState(null);
         // Only count those at level 2 or deeper (grandchildren and beyond)
         if (level >= 2) count++;
   
-        if (person.all_downline && person.all_downline.length > 0) {
-          countRecursive(person.all_downline, level + 1);
+        if (person?.all_downline && person?.all_downline.length > 0) {
+          countRecursive(person?.all_downline, level + 1);
         }
       }
     };
   
-    countRecursive(parent.allDownline, 1); // Start at level 1 (children)
+    countRecursive(parent?.allDownline, 1); // Start at level 1 (children)
     return count;
   };
   
@@ -913,6 +913,9 @@ const getAllMyDownlines =  async () => {
       <Modal
         open={updateProductModal}
         onClose={handleModalClose}
+        onRequestClose={handleModalClose}
+        shouldCloseOnOverlayClick={false} 
+        ariaHideApp={false}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-address"
       >

@@ -25,7 +25,11 @@ const Login = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [forgotPasswordModal, setForgotPasswordModal] = useState(false);
+  const [passwordTokenModal, setPasswordTokenModal] = useState(false);
+  const [resetPasswordModal, setResetPasswordModal] = useState(false);
+  const handleResetModalClose = () => setResetPasswordModal(false);
   const handleModalClose = () => setForgotPasswordModal(false);
+  const handleTokenModalClose = () => setPasswordTokenModal(false);
   const [alertText, setAlert] = useState("");
   const dispatch = useDispatch();
   const initialValues = {
@@ -110,11 +114,73 @@ const Login = () => {
       setLoading(false);
   
       if (response.success) {
-        setAlert("A reset link has been sent to your email.");
+        setAlert(response.data.message);
         resetForm();
         setForgotPasswordModal(false);
+        setPasswordTokenModal(true);
       } else {
-        setAlert("Failed to send reset link. Try again.");
+        setAlert(response.data.message);
+      }
+  
+      setTimeout(() => setAlert(""), 5000);
+    },
+  });
+
+  const updateTokenFormik = useFormik({
+    initialValues: {
+      email: "",
+      token: "",
+    },
+    validationSchema: Yup.object({
+      email: Yup.string().email("Invalid email address").required("Email is required"),
+      token: Yup.string().required("Token from email is required"),
+    }),
+    onSubmit: async (values, { resetForm }) => {
+      setLoading(true);
+      const response = await query({
+        method: "POST",
+        url: "/auth/verify-code",
+        bodyData: values,
+      });
+      setLoading(false);
+  console.log(response)
+      if (response.success) {
+        setAlert(response.data.message);
+        resetForm();
+        setPasswordTokenModal(false);
+        setResetPasswordModal(true);
+      } else {
+        setAlert(response.data.message);
+      }
+  
+      setTimeout(() => setAlert(""), 5000);
+    },
+  });
+
+  const resetPasswordFormik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: Yup.object({
+      email: Yup.string().email("Invalid email address").required("Email is required"),
+      password: Yup.string().required("Password is required"),
+    }),
+    onSubmit: async (values, { resetForm }) => {
+      setLoading(true);
+      const response = await query({
+        method: "POST",
+        url: "/auth/reset-password",
+        bodyData: values,
+      });
+      setLoading(false);
+  console.log(response)
+      if (response.success) {
+        setAlert(response.data.message);
+        resetForm();
+        setPasswordTokenModal(false);
+      } else {
+        setAlert(response.data.message);
       }
   
       setTimeout(() => setAlert(""), 5000);
@@ -201,6 +267,10 @@ const Login = () => {
       <Modal
         open={forgotPasswordModal}
         onClose={handleModalClose}
+        onClose={(event, reason) => {
+          if (reason === 'backdropClick') return;
+          handleModalClose();
+        }}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description">
         <div className="modal-dialog modal-dialog-centered modal-min" role="document">
@@ -228,8 +298,94 @@ const Login = () => {
                     </div>
                   </div>
       </Modal>
-     
 
+      <Modal
+        open={passwordTokenModal}
+        onClose={handleTokenModalClose}
+        onClose={(event, reason) => {
+          if (reason === 'backdropClick') return;
+          handleTokenModalClose();
+        }}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description">
+        <div className="modal-dialog modal-dialog-centered modal-min" role="document">
+                    <div className="modal-content">
+                      <div className="modal-body text-center">
+                        <button type="button" className="close" onClick={handleTokenModalClose} ><span aria-hidden="true">&times;</span></button>
+                        <i className="flaticon-secure-shield d-block"></i>
+                        <h1>Provide Token</h1>
+                        <p> Enter the 6 digit code that was sent to your email. We just want to ensure you are making this request on purpose. </p>
+
+                        <form onSubmit={updateTokenFormik.handleSubmit}>
+                        <div className="ms-form-group has-icon">
+                            <input type="text" placeholder="Email Address" className="form-control" name="email" id="email" onChange={updateTokenFormik.handleChange}
+      onBlur={updateTokenFormik.handleBlur}
+      value={updateTokenFormik.values.email}/>
+                            <i className="material-icons">email</i>
+                            {updateTokenFormik.touched.email && updateTokenFormik.errors.email && (
+      <div className="text-danger">{updateTokenFormik.errors.email}</div>
+    )}
+                          </div>
+                          <div className="ms-form-group has-icon">
+                            <input type="text" placeholder="Enter Token" className="form-control" name="token" id="token" onChange={updateTokenFormik.handleChange}
+      onBlur={updateTokenFormik.handleBlur}
+      value={updateTokenFormik.values.token}/>
+                            <i className="material-icons">key</i>
+                            {updateTokenFormik.touched.token && updateTokenFormik.errors.token && (
+      <div className="text-danger">{updateTokenFormik.errors.token}</div>
+    )}
+                          </div>
+                          <button type="submit" className="btn btn-primary shadow-none"> {loading ? "Validating..." : "Validate Token"}</button>
+                        </form>
+                      </div>
+
+                    </div>
+                  </div>
+      </Modal>
+     
+      <Modal
+        open={resetPasswordModal}
+        onClose={handleResetModalClose}
+        onClose={(event, reason) => {
+          if (reason === 'backdropClick') return;
+          handleResetModalClose();
+        }}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description">
+        <div className="modal-dialog modal-dialog-centered modal-min" role="document">
+                    <div className="modal-content">
+                      <div className="modal-body text-center">
+                        <button type="button" className="close" onClick={handleResetModalClose} ><span aria-hidden="true">&times;</span></button>
+                        <i className="flaticon-secure-shield d-block"></i>
+                        <h1>Set  New Password</h1>
+                        <p> Set a New Password for your account </p>
+
+                        <form onSubmit={resetPasswordFormik.handleSubmit}>
+                          <div className="ms-form-group has-icon">
+                            <input type="text" placeholder="Email Address" className="form-control" name="email" id="email" onChange={resetPasswordFormik.handleChange}
+      onBlur={resetPasswordFormik.handleBlur}
+      value={resetPasswordFormik.values.email}/>
+                            <i className="material-icons">email</i>
+                            {resetPasswordFormik.touched.email && resetPasswordFormik.errors.email && (
+      <div className="text-danger">{resetPasswordFormik.errors.email}</div>
+    )}
+                          </div>
+                          <div className="ms-form-group has-icon">
+                            <input type="text" placeholder="New Password" className="form-control" name="password" id="password" onChange={resetPasswordFormik.handleChange}
+      onBlur={resetPasswordFormik.handleBlur}
+      value={resetPasswordFormik.values.password}/>
+                            <i className="material-icons">password</i>
+                            {resetPasswordFormik.touched.password && resetPasswordFormik.errors.password && (
+      <div className="text-danger">{resetPasswordFormik.errors.password}</div>
+    )}
+                          </div>
+                          <button type="submit" className="btn btn-primary shadow-none"> {loading ? "Updating..." : "Resetting Password"}</button>
+                        </form>
+                      </div>
+
+                    </div>
+                  </div>
+      </Modal>
 
       
     </section>
