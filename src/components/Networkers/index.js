@@ -452,9 +452,7 @@ const Networkers = () => {
             <div className="text-danger">{formik.errors.lga}</div>
           )}
         </div>
-{/* NL-567619 */}
-                  {/* Placement ID */}
-                  {/* {myNetworkList?.length > 0 &&( */}
+        
                   <div className="col-xl-3 col-md-12">
                     <label htmlFor="ref_id">Placement Member Id</label>
                     <div className="input-group">
@@ -470,7 +468,7 @@ const Networkers = () => {
                         <option value="">Select an option</option>
                         {myNetworkList?.length > 0 &&
                           myNetworkList?.map((netlist) => (
-                            <option key={netlist.id} value={netlist.id}>
+                            <option key={netlist.id} value={netlist.my_ref_id}>
                               {netlist.name} - {netlist.my_ref_id}
                             </option>
                           ))}

@@ -76,7 +76,6 @@ const cartItems = useSelector(selectCart);
     
     };
 
-
 const clearCart = () => {
     dispatch(clearCart());
 };
