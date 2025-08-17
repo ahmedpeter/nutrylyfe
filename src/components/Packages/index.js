@@ -62,27 +62,27 @@ const Packages = () => {
     },
   });
 
-  const deleteProduct = async (productId) => {
-    if (!window.confirm("Are you sure you want to delete this product?"))
+  const deletePackage = async (packageID) => {
+    if (!window.confirm("Are you sure you want to delete this package?"))
       return;
 
     try {
       const response = await query({
         method: "DELETE",
-        url: `/admin/admin-products/product/delete-product?product_id=${productId}`,
+        url: `/account-packages/delete/${packageID}`,
         token: userInfo?.user?.user.token,
       });
-
+console.log(response);
       if (response.success) {
-        setAlert("Product deleted successfully!");
+        setAlert("Package deleted successfully!");
         getAllPackages();
       } else {
-        setAlert(response.message || "Failed to delete product.");
+        setAlert(response.message || "Failed to delete package.");
         setTimeout(() => setAlert(""), 5000);
       }
     } catch (error) {
       console.error("Delete error:", error);
-      setAlert("An error occurred while deleting the product.");
+      setAlert("An error occurred while deleting the package.");
     }
   };
 
@@ -159,7 +159,7 @@ const Packages = () => {
                             <th scope="col">Package Name</th>
                             <th scope="col">Price</th>
                             <th scope="col">Point Values</th>
-                            <th scope="col">Update</th>
+                            <th scope="col">Edit</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -185,7 +185,8 @@ const Packages = () => {
                                 >
                                   <i class="fas fa-pencil-alt"></i>
                                 </div>
-                            </td>
+                              </td>
+                            
                           </tr>
                             ))}
                           

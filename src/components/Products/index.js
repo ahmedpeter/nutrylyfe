@@ -40,7 +40,7 @@ const Products = () => {
       setProductList(response?.data?.data.data);
       console.log(
         `https://nutry.pmall.com.ng/` +
-          response?.data?.data.data[0].image
+          response?.data?.data?.data[0]?.image
       );
     } else {
       console.log(response);
