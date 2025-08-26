@@ -1,6 +1,6 @@
 // import * as React from "react";
 import * as React from "react";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import currency from "../../utils/formatCurrency";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
@@ -10,16 +10,20 @@ import { copyToClipboard } from "../../utils/copyTextToClipBoard";
 import Modal from "@mui/material/Modal";
 import { useFormik } from "formik";
 import query from "../../helpers/query.ts";
+import WalletForm from "../Wallet/WalletForm.js";
 import ConvertPackage from "../../helpers/convertPackages";
 
 const Dashboard = () => {
   const [productList, setProductList] = useState(null);
   const [stockiestProductList, setStockiestProductList] = useState(null);
   const [availableProducts, setAvailableProducts] = useState(null);
+  const [walletModalOpen, setWalletModalOpen] = useState(false);
+  // const [transferFundsModal, setTransferFundsModal] = useState(false);
   const [availableOrders, setAvailableOrders] = useState(null);
   const [allDownlines, setAllDownlines] = useState(null);
   const [networkerOrders, setNetworkerOrders] = useState(null);
   const handleModalClose = () => setUpdateProductModal(false);
+  
   const [userProfile, setUserProfile] = useState("");
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -28,6 +32,9 @@ const Dashboard = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isEditMode, setIsEditMode] = useState(false);
   const [updateProductModal, setUpdateProductModal] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [fundWallet, setFundWallet] = useState(true); // default action
+  const [transferFunds, setTransferFunds] = useState(false);
 const [allAccounts, setAllAccounts] = useState(null);
   const userInfo = useSelector((state) => state);
 
@@ -75,6 +82,22 @@ const [allAccounts, setAllAccounts] = useState(null);
 			setTimeout(() => setAlert(null), 5000);
 		});
 	};
+  
+ 
+
+  const handleOpenFund = () => {
+    setFundWallet(true);
+    setModalOpen(true);
+  };
+
+  const handleOpenTransfer = () => {
+    setFundWallet(false);
+    setModalOpen(true);
+  };
+
+  const handleClose = () => {
+    setModalOpen(false);
+  };
 
   const countGrandchildrenAndBeyond = (parent) => {
     let count = 0;
@@ -164,7 +187,7 @@ const getAllMyDownlines =  async () => {
       console.log(response);
       // getAllProductsFromStockiest(12)
       // getAllProductsFromStockiest(8)
-      getAllProductsFromStockiest(3)
+      getAllProductsFromStockiest(58)
       setStockiestList(response?.data?.data.data);
     } else {
       console.log(response);
@@ -172,6 +195,16 @@ const getAllMyDownlines =  async () => {
       setLoading(false);
     }
   };
+
+ 
+
+  const handleViewOrderDetails = useCallback((order) => {
+      navigate(`/app/order-details`, { state: { order } });
+    },
+    [navigate]
+  );
+
+
 
   const getStockiestProductById = async (prodId) => {
     const response = await query({
@@ -450,7 +483,7 @@ const getAllMyDownlines =  async () => {
                       <h6>Downlines</h6>
                       <section className="flex__downlines">
                         <div>
-                          <p class="ms-card-change">
+                          <p class="ms-card-change" style={{fontSize: 22}}>
                             {" "}
                             <i class="material-icons">arrow_upward</i>{" "}
                             {userProfile?.referrals?.length}
@@ -458,9 +491,9 @@ const getAllMyDownlines =  async () => {
                           <p class="fs-9 mt-7">Direct Referral</p>
                         </div>
                         <div>
-                          <p class="ms-card-change">
+                          <p class="ms-card-change" style={{fontSize: 22}}>
                             {" "}
-                            <i class="material-icons">arrow_upward</i> {countGrandchildrenAndBeyond(allDownlines)}
+                            <i class="material-icons">arrow_downward</i> {countGrandchildrenAndBeyond(allDownlines)}
                           </p>
                           <p class="fs-9 mt-7">Indirect Referral</p>
                         </div>
@@ -475,16 +508,45 @@ const getAllMyDownlines =  async () => {
                   <div class="ms-card-body media">
                     <div class="media-body">
                       <h6>My Wallet</h6>
-                      <p class="ms-card-change">
+                      <p class="ms-card-change" style={{fontSize: 22}}>
                         {" "}
-                        <i class="material-icons">arrow_upward</i>{" "}
-                        {currency(userInfo?.user.user.wallet)}
+                        <i class="material-icons">credit_card</i>{" "}
+                        {currency(userProfile?.wallet?.balance)}
                       </p>
-                      <p class="fs-9 mt-7">See more</p>
+                      <ul
+                      class="btn-group btn-group-toggle nav nav-tabs ms-graph-metrics"
+                      role="tablist"
+                    >
+                      <li role="presentation" style={{display: "flex", alignItems: "center"}}>
+                      <i class="material-icons">add</i>{" "}
+                        <a
+                          class="btn btn-sm active show"
+                          role="tab"
+                          data-toggle="tab"
+                          aria-selected="true"
+                          onClick={handleOpenFund}
+                        >
+                          Fund Wallet
+                        </a>
+                      </li>
+                      <li role="presentation" style={{display: "flex", alignItems: "center"}}>
+                      <i class="material-icons">shortcut</i>
+                        <a
+                          class="btn btn-sm"
+                          role="tab"
+                          data-toggle="tab"
+                          aria-selected="false"
+                          // onClick={handleFundWallet}
+                          // onClick={()=> handleTransferFunds()}
+                          onClick={handleOpenTransfer}
+                        >
+                          Transfer Funds
+                        </a>
+                      </li>
+                    </ul>
                     </div>
                   </div>
-                  <i class="material-icons">beach_access</i>
-                  {/*<i class="material-icons">ac_unit</i> */}
+                  
                 </div>
               </div>
               <div class="col-xl-4 col-md-6">
@@ -492,9 +554,9 @@ const getAllMyDownlines =  async () => {
                   <div class="ms-card-body media">
                     <div class="media-body">
                       <h6>My Point Value</h6>
-                      <p class="ms-card-change">
+                      <p class="ms-card-change" style={{fontSize: 22}}>
                         {" "}
-                        <i class="material-icons">arrow_upward</i>{" "}
+                        <i class="material-icons">ac_unit</i>{" "}
                         {userInfo?.user.user.pv}
                       </p>
                       <p class="fs-9 mt-7">See more</p>
@@ -659,6 +721,7 @@ const getAllMyDownlines =  async () => {
                           role="tab"
                           data-toggle="tab"
                           aria-selected="false"
+                          onClick={()=> navigate("/app/networker/genealogy")}
                         >
                           See Genealogy
                         </a>
@@ -679,10 +742,8 @@ const getAllMyDownlines =  async () => {
                             <tr>
                               <th scope="col">Account Name</th>
                               <th scope="col">Ref ID</th>
-                              <th scope="col">Username</th>
                               <th scope="col">Package</th>
                               <th scope="col">Position</th>
-                              <th scope="col">State</th>
                               <th scope="col">Contact</th>
                               <th scope="col">Reg. Date</th>
                             </tr>
@@ -692,10 +753,8 @@ const getAllMyDownlines =  async () => {
                               <tr key={refer.id}>
                                 <td>{refer.name}</td>
                                 <td>{refer.my_ref_id}</td>
-                                <td>{refer.username}</td>
                                 <td><ConvertPackage id={refer.package_id} /></td>
                                 <td>{refer.position !== null ? refer.position : "N/A"} </td>
-                                <td>{refer.state} </td>
                                 <td>{refer.phone} <br/>
                                 {refer.email}</td>
                                 <td>
@@ -794,7 +853,7 @@ const getAllMyDownlines =  async () => {
                       id="b-orders"
                     >
                       <div class="table-responsive">
-                        <table class="table table-hover thead-light">
+                        <table class="table table-hover thead-primary">
                           <thead>
                             <tr>
                               <th scope="col">S/N</th>
@@ -837,7 +896,7 @@ const getAllMyDownlines =  async () => {
               </div>
             </div>
           )}
-          <div class="col-xl-8 col-md-12">
+          <div class="col-xl-12 col-md-12">
             <div class="ms-panel ms-crypto-orders-expanded">
               <div class="ms-panel-header">
                 <div class="d-flex justify-content-between">
@@ -855,17 +914,19 @@ const getAllMyDownlines =  async () => {
                       <tr>
                         <th scope="col">Order Date</th>
                         <th scope="col">Networker</th>
-                        <th scope="col">Order Details</th>
+                        <th scope="col">Total</th>
+                        {/* <th scope="col">Order Details</th> */}
                       </tr>
                     </thead>
                     <tbody>
                     {groupedByUser.map((group) => (
-                      <tr>
+                      <tr onClick={()=> handleViewOrderDetails(group.orders)} key={group.id}>
                         <td>{moment(group.created_at).format("lll")}</td>
                         <td className="text-capitalize">{group.user.name}</td>
-                        <td>
-                        <ol>
-        {group.orders.map((order) => (
+                        <td>{group?.orders?.length} Orders</td>
+                        <td>{group?.orders?.status}
+                        {/* <ol> */}
+        {/* {group.orders.map((order) => (
           <li key={order.orderID} className="pointer d-flex justify-content-between align-items-center">
             <span>{order.orderID}</span>
             <span className={`text-capitalize badge ${
@@ -876,8 +937,8 @@ const getAllMyDownlines =  async () => {
               {order.status}
             </span>
           </li>
-        ))}
-      </ol>
+        ))} */}
+      {/* </ol> */}
 
                         </td>
                         
@@ -1143,6 +1204,12 @@ const getAllMyDownlines =  async () => {
           </div>
         </div>
       </Modal>
+
+      <WalletForm
+        fundWallet={fundWallet}
+        open={modalOpen}
+        handleModalWalletClose={handleClose}
+      />
     </section>
   );
 };

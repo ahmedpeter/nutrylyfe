@@ -4123,6 +4123,69 @@ a .badge[class*='badge-outline-'] {
   color: #fff;
   text-align: center;
 }
+.user-level {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  list-style: none;
+  padding: 0;
+}
+
+.user-level li {
+  text-align: center;
+}
+
+.user-level li.pos-1 { order: 1; } /* left */
+.user-level li.pos-2 { order: 2; } /* right */
+/* Lines connecting parent and children */
+.tree-node {
+  position: relative;
+  display: inline-block;
+  text-align: center;
+  margin: 20px;
+  padding: 10px;
+  background: #fff;
+  border: 2px solid #46b289;
+  border-radius: 10px;
+  z-index: 1;
+}
+.node {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 10px;
+  border: 1px solid #d0d7de;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
+
+.tree-node::before,
+.tree-node::after {
+  content: "";
+  position: absolute;
+  top: -20px; /* adjust to control line height */
+  width: 50%;
+  height: 20px;
+  border-top: 2px solid #46b289;
+}
+
+.tree-node::before {
+  left: -50%;
+  border-right: 2px solid #46b289;
+}
+
+.tree-node::after {
+  right: -50%;
+  border-left: 2px solid #46b289;
+}
+
+/* Hide lines if no parent */
+.tree-node:only-child::before,
+.tree-node:only-child::after {
+  display: none;
+}
+
 
 .page-item.active-circle .page-link::after,
 .page-item.active-round .page-link::after {

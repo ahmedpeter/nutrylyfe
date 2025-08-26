@@ -23,6 +23,7 @@ function Sidebar() {
         <SidebarRow icon="fa-users" label="Networkers" href="/app/networkers" />
         <SidebarRow icon="fa-address-book" label="Accounts" href="/app/accounts" />
         <SidebarRow icon="fa-cube" label="Packages" href="/app/packages" />
+        {/* <SidebarRow icon="fa-cube" label="Wallet" href="/app/wallet" /> */}
         <SidebarRow icon="fa-receipt" label="Reports" href="/app/reports" />
         <SidebarRow icon="fa-briefcase" label="Stockiest" href="/app/stockiest" />
         <SidebarRow icon="fa-power-off" label="Log Out" onClick={logOutUser} />

@@ -27,6 +27,7 @@ const StockiestProducts = () => {
   const [productList, setProductList] = useState(null);
   const { placeOrder, serverResp } = usePlaceOrder();
 const [cartMessage, setCartMessage] = useState("");
+const [paymentMethod, setPaymentMethod] = useState("paystack")
 const dispatch = useDispatch();
 const cartItems = useSelector(selectCart);
 
@@ -53,11 +54,20 @@ const cartItems = useSelector(selectCart);
     }
   };
 
+
+  const handlePaymentMethodChange = (e) => {
+    const method = e.target.value;
+    console.log(method)
+    setPaymentMethod(method);
+  };
+
+
   const handleAddToCart = (product) => {
+    console.log(product);
     dispatch(addItem({ ...product, quantity: 1 }));
     setCartMessage(
       <div className="title-case">
-        {product.name} added to cart!
+        {product?.product?.name} added to cart!
       </div>
     );
     setTimeout(() => setCartMessage(""), 5000);
@@ -65,7 +75,7 @@ const cartItems = useSelector(selectCart);
   
     const handlePlaceOrder = async () => {
       try {
-        await placeOrder(stockiestId);
+        await placeOrder(stockiestId, paymentMethod);
       } catch (err) {
         const errorMessage =
         err?.response?.data?.data?.message || "Failed to place order.";
@@ -167,7 +177,7 @@ const clearCart = () => {
 
                 </tbody>
               </table>
-              <button onClick={() => handleAddToCart(product?.product)} class="btn btn-primary mr-3  ms-graph-metrics">Add To Cart</button>
+              <button onClick={() => handleAddToCart(product)} class="btn btn-primary mr-3  ms-graph-metrics">Add To Cart</button>
 
                                
                               </div>
@@ -187,11 +197,11 @@ const clearCart = () => {
               <h3 style={{marginBottom: 20}}>Order Details</h3>
               <table class="table ms-profile-information">
                 <tbody>
-                {cartItems.cart.length > 0 && cartItems.cart.map((product)=> (
+                {cartItems?.cart.length > 0 && cartItems?.cart.map((product)=> (
                   <tr>
                       <i onClick={() => dispatch(removeItem(product.id))} class="fa fa-trash fa-15x"></i>
-                        <td scope="row text-capitalize">{product.name}</td>
-                            <td>{currency(product.price)} </td>
+                        <td scope="row text-capitalize">{product.product.name}</td>
+                            <td>{currency(product.product.price)} </td>
                             <td>
                             <div class="flex g-10 all-center cart-item-count">
                                 <p class="f-12 count flex all-center" onClick={() => dispatch(decrementItem(product.id))}> - </p>
@@ -214,6 +224,26 @@ const clearCart = () => {
                     <p> Oops! Nothing in cart yet </p>
                 )}
               </table>
+
+
+              <div className="col-xl-12 col-md-12">
+          <label htmlFor="payment_type">Select Method of Payment</label>
+          <div className="input-group">
+            <select
+              className="form-control"
+              id="payment_type"
+              name="payment_type"
+              value={paymentMethod}
+              onChange={handlePaymentMethodChange}
+              required
+            >
+              <option value="wallet">Pay from Wallet Balance</option>
+              <option value="paystack">Pay With Debit Card</option>
+             
+            </select>
+          </div>
+        </div>
+
 
               <button onClick={handlePlaceOrder} class="btn btn-green ms-graph-metrics" style={{marginBottom: 20}}>Place Order</button>
 

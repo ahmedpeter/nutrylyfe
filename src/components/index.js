@@ -9,9 +9,13 @@ import ProductDetails from "./Products/details";
 import Products from "./Products";
 import Cart from "./Products/cart";
 import NewProduct from "./Products/NewProduct";
+import VerifyTransaction from "./Transactions/VerifyTransaction";
 import NewStockiest from "./Stockiest/NewStockiest";
+import OrderHistory from "./Stockiest/orderHistory";
 import Networkers from "./Networkers";
+import Wallet from "./Wallet";
 import Packages from "./Packages";
+import MyNetwork from "./Networkers/genealogy/MyNetwork";
 import Accounts from "./Accounts";
 import UserProfile from "./Networkers/UserProfile";
 import AddNetworker from "./Networkers/AddNetworker";
@@ -58,8 +62,12 @@ function Layout() {
           <Route path="/app/dashboard" element={<Dashboard />} />
           <Route path="/app/product/:prodId/details" element={<ProductDetails />} />
           <Route path="/app/product/stockiest/:stockiestId" element={<StockiestProducts />} />
+          <Route path="/app/order-details" element={<OrderHistory />} />
           <Route path="/app/networkers" element={<Networkers />} />
+          <Route path="/app/wallet" element={<Wallet />} />
           <Route path="/app/packages" element={<Packages />} />
+          <Route path="/app/networker/genealogy" element={<MyNetwork />} />
+          <Route path="/call-back/wallet-funding-verification" element={<VerifyTransaction />} />
           <Route path="/app/accounts" element={<Accounts />} />
           <Route path="/app/cart" element={<Cart />} />
           <Route path="/app/user/profile" element={<UserProfile />} />

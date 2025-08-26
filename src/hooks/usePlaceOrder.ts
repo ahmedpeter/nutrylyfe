@@ -5,14 +5,15 @@ import query from "../helpers/query.ts";
 export const usePlaceOrder = () => {
     const [serverResp, setServerResp] = useState("");
     // const [isLoading, setIsLoading] = useState(false);
-    const cart = useSelector((state) => state.cart.cart);
-  const userToken = useSelector((state) => state.user?.user?.token); 
+    const cart = useSelector((state) => state?.cart.cart);
+  const userToken = useSelector((state) => state?.user?.user?.token); 
 
-  const placeOrder = async (stockist_user_id) => {
+  const placeOrder = async (stockist_user_id, payment_type) => {
     if (!stockist_user_id) {
       alert("No stockist selected.");
       return;
     }
+    console.log(cart);
     const products = cart
     .filter(item => item?.id && item?.quantity)
     .map(item => ({
@@ -20,6 +21,7 @@ export const usePlaceOrder = () => {
       quantity: item.quantity
     }));
 
+    console.log(products);
   if (!products.length) {
     throw new Error("Cart is empty or invalid.");
   }
@@ -27,6 +29,7 @@ export const usePlaceOrder = () => {
     const payload = {
       stockist_user_id,
       products,
+      payment_type
     };
 
     console.log("📦 Sending order payload:", payload);

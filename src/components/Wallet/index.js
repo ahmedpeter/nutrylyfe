@@ -17,7 +17,7 @@ import moment from "moment";
 const Networkers = () => {
   const [loading, setLoading] = useState(false);
   const [alertText, setAlert] = useState("");
-  const [addNetworkerModal, setAddNetworkerModal] = useState(false);
+  const [addNetworkerModal, setFundWalletModal] = useState(false);
   const userInfo = useSelector((state) => state);
   const navigate = useNavigate();
   const [selectedState, setSelectedState] = useState("");
@@ -25,7 +25,7 @@ const Networkers = () => {
   const [lgas, setLgas] = useState([]);
   const [expandedRow, setExpandedRow] = useState(null);
   const [myNetworkList, setMyNetworkList] = useState([]);
-  const handleModalClose = () => setAddNetworkerModal(false);
+  const handleModalClose = () => setFundWalletModal(false);
   const [packageList, setPackageList] = useState([]);
   const [allAccounts, setAllAccounts] = useState([]);
   const [selectedNetworker, setSelectedNetworker] = useState(null);
@@ -115,7 +115,7 @@ const Networkers = () => {
       if (response.success) {
         resetForm();
         getLinkedNetworkers(); // refresh list
-        setAddNetworkerModal(false);
+        setFundWalletModal(false);
         setSelectedNetworker(null);
         setIsEditMode(false);
       } else {
@@ -195,12 +195,12 @@ const Networkers = () => {
                 <div class="d-flex justify-content-between">
                   <div class="ms-header-text">
                     <h6>
-                      All Networkers{" "}
+                     My Wallet & Fundings
                       <span class="badge badge-danger">
                         {myNetworkList?.length}
                       </span>
                     </h6>
-                    <p>See your direct network</p>
+                    <p>Fund your Nutrylyfe wallet</p>
                   </div>
                   <ul
                     class="btn-group btn-group-toggle nav nav-tabs ms-graph-metrics"
@@ -212,10 +212,22 @@ const Networkers = () => {
                         role="tab"
                         data-toggle="tab"
                         aria-selected="false"
-                        onClick={() => setAddNetworkerModal(true)}
+                        onClick={() => setFundWalletModal(true)}
                       >
                         {" "}
-                        Add a Networker{" "}
+                       Transfer Funds
+                      </a>
+                    </li>
+                    <li role="presentation">
+                      <a
+                        class="btn btn-sm"
+                        role="tab"
+                        data-toggle="tab"
+                        aria-selected="false"
+                        onClick={() => setFundWalletModal(true)}
+                      >
+                        {" "}
+                       Fund Wallet
                       </a>
                     </li>
                   </ul>
@@ -235,15 +247,10 @@ const Networkers = () => {
                         <thead>
                           <tr>
                             <th scope="col">S/N</th>
-                            <th scope="col">Account Name</th>
+                            <th scope="col">Date</th>
                             <th scope="col">Ref ID</th>
-                            <th scope="col">Position</th>
-                            <th scope="col">Downlines</th>
-                            <th scope="col">Username</th>
-                            <th scope="col">Package</th>
-                            <th scope="col">Contact</th>
-                            <th scope="col">Reg. Date</th>
-                            <th scope="col">Action</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Status</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -272,7 +279,7 @@ const Networkers = () => {
                                   onClick={() => {
                                     setSelectedNetworker(netlist);
                                     setIsEditMode(true);
-                                    setAddNetworkerModal(true);
+                                    setFundWalletModal(true);
                                   }}
                                 >
                                   <i class="fas fa-pencil-alt"></i>
@@ -306,7 +313,7 @@ const Networkers = () => {
                                   onClick={() => {
                                     setSelectedNetworker(net);
                                     setIsEditMode(true);
-                                    setAddNetworkerModal(true);
+                                    setFundWalletModal(true);
                                   }}
                                 >
                                   <i class="fas fa-pencil-alt"></i>
@@ -493,7 +500,7 @@ const Networkers = () => {
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         required
-                        // disabled={isEditMode}
+                        disabled={isEditMode}
                       />
                     </div>
                     {formik.touched.ref_id && formik.errors.ref_id && (

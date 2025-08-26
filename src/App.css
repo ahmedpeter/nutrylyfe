@@ -14,6 +14,106 @@
   height: 40vmin;
   pointer-events: none;
 }
+.tree-container {
+  position: relative;
+  width: 100%;
+  height: 600px;
+}
+
+.tree-node {
+  position: absolute;
+  padding: 25px 12px;
+  background: #46b289;
+  color: #fff;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 14px;
+  transform: translate(-50%, -50%);
+  z-index: -1;
+}
+.nodetext {
+  width: 100%;
+  height: 30px;
+  position: absolute;
+  top: 110px;
+  left: 0px;
+  padding: 10px;
+  color: white;
+  font-weight: bold;
+  font-size: 15px;
+  border-radius: 0px 0px 9px 9px;
+  z-index: 1;
+  background-color: #008000;
+    text-align: center;
+}
+.sdgwehfhe {
+  margin-bottom: 40px;
+    position: absolute;
+    display: block-inline;
+    width: 150px;
+    height: 130px;
+    background-color: #C6E5F3;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    text-decoration: none;
+    color: #666;
+    font-family: arial, verdana, tahoma;
+    font-size: 11px;
+    display: inline-block;
+    border-radius: 10px !important;
+}
+
+/* Lines connecting parent and children */
+.tree-node {
+  position: relative;
+  display: inline-block;
+  text-align: center;
+  margin: 20px;
+  padding: 10px;
+  background: #fff;
+  border: 2px solid #46b289;
+  border-radius: 10px;
+  z-index: 1;
+}
+
+.tree-node::before,
+.tree-node::after {
+  content: "";
+  position: absolute;
+  top: -20px; /* adjust to control line height */
+  width: 50%;
+  height: 20px;
+  border-top: 2px solid #46b289;
+}
+
+.tree-node::before {
+  left: -50%;
+  border-right: 2px solid #46b289;
+}
+
+.tree-node::after {
+  right: -50%;
+  border-left: 2px solid #46b289;
+}
+
+/* Hide lines if no parent */
+.tree-node:only-child::before,
+.tree-node:only-child::after {
+  display: none;
+}
+
+
+/* SVG overlay */
+.tree-lines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* don’t block clicks */
+  z-index: 1;
+}
+
 .pdght {
   position: absolute!important;
     top: 10%!important;
